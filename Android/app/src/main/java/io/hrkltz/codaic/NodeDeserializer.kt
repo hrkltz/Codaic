@@ -1,6 +1,9 @@
 package io.hrkltz.codaic
 import com.google.gson.*
+import io.hrkltz.codaic.node.LightNode
+import io.hrkltz.codaic.node.LogNode
 import io.hrkltz.codaic.node.Node
+import io.hrkltz.codaic.node.ScriptNode
 import io.hrkltz.codaic.node.ScriptStartNode
 import java.lang.reflect.Type
 
@@ -10,9 +13,11 @@ class NodeDeserializer : JsonDeserializer<Node?> {
     private val nodeTypeRegistry: MutableMap<String, Class<out Node>> =
         HashMap()
 
+
     fun registerType(nodeTypeName: String, nodeType: Class<out Node>) {
         nodeTypeRegistry[nodeTypeName] = nodeType
     }
+
 
     override fun deserialize(
         json: JsonElement,
@@ -32,6 +37,9 @@ class NodeDeserializer : JsonDeserializer<Node?> {
 
         init {
             deserializer.registerType("ScriptStartNode", ScriptStartNode::class.java)
+            deserializer.registerType("LogNode", LogNode::class.java)
+            deserializer.registerType("LightNode", LightNode::class.java)
+            deserializer.registerType("ScriptNode", ScriptNode::class.java)
         }
     }
 }

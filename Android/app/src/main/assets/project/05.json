@@ -10,10 +10,17 @@
     "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6",
     "nodeType": "LogNode",
     "nodeInputPortArray": [{ "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404", "outputIndex": 0 }],
+    "nodeOutputPortArray": [{ "nodeId": "dsvd2s1d-9da2-03dk-23kd-ke3ei093j3j9", "inputIndex": 0 }],
+    "NodeVisual": { "x": 100, "y": 200 }
+  },
+  {
+    "nodeId": "dsvd2s1d-9da2-03dk-23kd-ke3ei093j3j9",
+    "nodeType": "ScriptNode",
+    "nodeInputPortArray": [{ "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "outputIndex": 0 }],
     "nodeOutputPortArray": [ null ],
-    "NodeVisual": {
-      "x": 100,
-      "y": 200
-    }
+    "nodeSettings": {
+      "code": "console.log('Light sensor value: ' + input);"
+    },
+    "NodeVisual": { "x": 100,  "y": 300 }
   }
 ]

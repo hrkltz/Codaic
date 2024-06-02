@@ -1,12 +1,9 @@
 [
   {
     "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404",
-    "nodeType": "ScriptStartNode",
+    "nodeType": "LightNode",
     "nodeInputPortArray": null,
     "nodeOutputPortArray": [{ "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "inputIndex": 0 }],
-    "nodeSettings": {
-      "code": "Codaic.sleep(500); 'Hello World!';"
-    },
     "nodeVisual": { "x": 100, "y": 100 }
   },
   {

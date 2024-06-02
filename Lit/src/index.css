@@ -1,0 +1,33 @@
+:root {
+    --background-day: #ffffff;
+    --background-night: #1a1a1a;
+    --border-day: #1a1a1a;
+    --border-night: #ffffff;
+    --primary-day: #000000;
+    --primary-night: #ffffff;
+}
+
+* {
+    user-select: none !important;
+}
+
+html {
+    height: 100dvh;
+    width: 100dvw;
+    overflow: hidden;
+}
+
+body {
+    height: 100dvh;
+    width: 100dvw;
+    margin: 0;
+    background-color: var(--background-day);
+    color: var(--primary-day);
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: var(--primary-day); /* Use dark background in dark mode */
+        color: var(--primary-night); /* Use light text in dark mode */
+    }
+}

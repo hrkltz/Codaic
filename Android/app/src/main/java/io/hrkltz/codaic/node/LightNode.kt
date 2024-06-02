@@ -1,49 +1,53 @@
 package io.hrkltz.codaic.node
-
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.hardware.SensorManager.SENSOR_DELAY_FASTEST
 import android.util.Log
-import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor
-import com.caoccao.javet.interop.V8Host
-import com.caoccao.javet.interop.V8Runtime
-import com.google.gson.annotations.SerializedName
-import io.hrkltz.codaic.JavetExtension
+import io.hrkltz.codaic.Application
 import io.hrkltz.codaic.Project
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 
 
-class ScriptStartNode: Node() {
-    @Serializable
-    data class NodeSettings(var code: String = "")
-    lateinit var nodeSettings: NodeSettings
+class LightNode : Node() {
+    private var mSensorManager: SensorManager? = null
+    private var mSensorEventListener: SensorEventListener? = null
+    private var mSensor: Sensor? = null
+
+
+    override fun start() {
+        Log.i("Codaic", "LightNode.start()")
+        mSensorManager = Application.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_LIGHT)
+        mSensorEventListener = object : SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+            override fun onSensorChanged(event: SensorEvent) {
+                if (nodeOutputPortArray[0] != null)
+                    Project.getInstance().sendData(nodeOutputPortArray[0]!!.nodeId,
+                        nodeOutputPortArray[0]!!.inputIndex, event.values[0])
+            }
+        }
+        mSensorManager!!.registerListener(mSensorEventListener, mSensor, SENSOR_DELAY_FASTEST)
+    }
+
+
+    override fun stop() {
+        Log.i("Codaic", "LightNode.stop()")
+        mSensorManager!!.unregisterListener(mSensorEventListener, mSensor)
+        mSensorEventListener = null
+        mSensorManager = null
+        mSensor = null
+    }
+
+
+    protected fun finalize() {
+        Log.i("Codaic", "LightNode.finalize()")
+        // finalization logic
+    }
 
 
     override fun worker() {
-        Log.i("Codaic", "ScriptStartNode.worker()")
-        // lifecycleScope.launch { ?
-        GlobalScope.launch {
-            while (Project.getInstance().isRunning) {
-                V8Host.getV8Instance().createV8Runtime<V8Runtime>().use {
-                    // Link console.log(..) to Log.i(..).
-                    JavetStandardConsoleInterceptor(it).register(it.globalObject)
-                    // Bind AnnotationBasedCallbackReceiver to V8.
-                    val v8ValueObject = it.createV8ValueObject()
-                    it.globalObject.set("Codaic", v8ValueObject)
-                    val annotationBasedCallbackReceiver = JavetExtension()
-                    v8ValueObject.bind(annotationBasedCallbackReceiver)
-                    // Execute the code
-                    val result = it.getExecutor(nodeSettings.code).executeObject<Any>()
-                    //Log.i("Codaic", "Result: $result")
-                    // Unregister console.
-                    JavetStandardConsoleInterceptor(it).unregister(it.globalObject)
-                    // Notify V8 to perform GC. (Optional)
-                    it.lowMemoryNotification()
-
-                    if (nodeOutputPortArray[0] != null)
-                        Project.getInstance().sendData(nodeOutputPortArray[0]!!.nodeId,
-                            nodeOutputPortArray[0]!!.inputIndex, result)
-                }
-            }
-        }
+        Log.i("Codaic", "LightNode.worker()")
     }
 }
