@@ -57,7 +57,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.guava)
     //// GraalJS
     //implementation("org.graalvm.js:js:23.0.3")
-    // Javet (Node)
+    // Javet (Tessera)
     //implementation(libs.javet.android.node)
     // Javet (V8)
     implementation(libs.javet.android.v8)

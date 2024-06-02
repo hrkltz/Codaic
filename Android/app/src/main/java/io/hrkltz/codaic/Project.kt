@@ -2,7 +2,8 @@ package io.hrkltz.codaic
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import io.hrkltz.codaic.node.Node
+import io.hrkltz.codaic.tessera.Tessera
+import io.hrkltz.codaic.tessera.TesseraDeserializer
 import io.hrkltz.codaic.util.AssetsUtil
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -21,7 +22,7 @@ class Project {
     }
 
     // Instance - private
-    private var nodeMap = mutableMapOf<String, Node>()
+    private var nodeMap = mutableMapOf<String, Tessera>()
     private var _isRunning = AtomicBoolean(false)
 
     // Instance - public
@@ -30,11 +31,11 @@ class Project {
 
     fun init(projectName: String) {
         val gson = GsonBuilder()
-            .registerTypeAdapter(Node::class.java, NodeDeserializer.deserializer)
+            .registerTypeAdapter(Tessera::class.java, TesseraDeserializer.deserializer)
             .create()
         val jsonString = AssetsUtil(Application.context).load("project/$projectName.json")
-        val nodeArray: List<Node> = gson.fromJson(jsonString, object : TypeToken<List<Node>>() {}.type)
-        nodeArray.forEach { nodeMap.put(it.nodeId, it) }
+        val nodeArray: List<Tessera> = gson.fromJson(jsonString, object : TypeToken<List<Tessera>>() {}.type)
+        nodeArray.forEach { nodeMap.put(it.tesseraId, it) }
     }
 
 
@@ -42,8 +43,8 @@ class Project {
         Log.i("Codaic", "Project.start()")
         _isRunning.set(true)
         nodeMap.forEach { it.value.start() }
-        //nodeMap.filter { it.value is ScriptStartNode }.forEach { it.value.worker() }
-        //nodeMap.filter { it.value is StartNode }.forEach { it.value.worker() }
+        //nodeMap.filter { it.value is ScriptStartTessera }.forEach { it.value.worker() }
+        //nodeMap.filter { it.value is StartTessera }.forEach { it.value.worker() }
     }
 
 
@@ -54,12 +55,12 @@ class Project {
     }
 
 
-    fun sendData(nodeId: String, inputIndex: Int, data: Any?) {
-        Log.i("Codaic", "Project.sendData($nodeId, $inputIndex, $data)")
-        nodeMap[nodeId]!!.nodeInputPortArray[inputIndex]!!.data = data
+    fun sendData(tesseraId: String, inputIndex: Int, data: Any?) {
+        Log.i("Codaic", "Project.sendData($tesseraId, $inputIndex, $data)")
+        nodeMap[tesseraId]!!.inputPortArray[inputIndex]!!.data = data
 
-        //if (nodeMap[nodeId]!!.nodeInputPortArray[inputIndex]!!.mode == "Active") {
-            nodeMap[nodeId]!!.worker()
+        //if (nodeMap[tesseraId]!!.inputPortArray[inputIndex]!!.mode == "Active") {
+            nodeMap[tesseraId]!!.worker()
         //}
     }
 }

@@ -1,26 +1,26 @@
 [
   {
-    "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404",
-    "nodeType": "LightNode",
-    "nodeInputPortArray": null,
-    "nodeOutputPortArray": [{ "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "inputIndex": 0 }],
+    "tesseraId": "b5522af7-c189-40bd-bc3b-71a6b74ca404",
+    "tesseraType": "LightTessera",
+    "inputPortArray": null,
+    "outputPortArray": [{ "tesseraId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "inputIndex": 0 }],
     "nodeVisual": { "x": 100, "y": 100 }
   },
   {
-    "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6",
-    "nodeType": "LogNode",
-    "nodeInputPortArray": [{ "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404", "outputIndex": 0 }],
-    "nodeOutputPortArray": [{ "nodeId": "dsvd2s1d-9da2-03dk-23kd-ke3ei093j3j9", "inputIndex": 0 }],
-    "NodeVisual": { "x": 100, "y": 200 }
+    "tesseraId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6",
+    "tesseraType": "LogTessera",
+    "inputPortArray": [{ "tesseraId": "b5522af7-c189-40bd-bc3b-71a6b74ca404", "outputIndex": 0 }],
+    "outputPortArray": [{ "tesseraId": "dsvd2s1d-9da2-03dk-23kd-ke3ei093j3j9", "inputIndex": 0 }],
+    "TesseraVisual": { "x": 100, "y": 200 }
   },
   {
-    "nodeId": "dsvd2s1d-9da2-03dk-23kd-ke3ei093j3j9",
-    "nodeType": "ScriptNode",
-    "nodeInputPortArray": [{ "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "outputIndex": 0 }],
-    "nodeOutputPortArray": [ null ],
-    "nodeSettings": {
+    "tesseraId": "dsvd2s1d-9da2-03dk-23kd-ke3ei093j3j9",
+    "tesseraType": "ScriptTessera",
+    "inputPortArray": [{ "tesseraId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "outputIndex": 0 }],
+    "outputPortArray": [ null ],
+    "nodeSettingsJsonMap": {
       "code": "console.log('Light sensor value: ' + input);"
     },
-    "NodeVisual": { "x": 100,  "y": 300 }
+    "TesseraVisual": { "x": 100,  "y": 300 }
   }
 ]

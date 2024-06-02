@@ -1,0 +1,55 @@
+[
+    {
+        "inputPortArray": [
+            {
+                "portIndex": 0,
+                "tesseraId": "3700f662-e6ea-41fc-bb0e-b2e9dc01ee71"
+            }
+        ],
+        "outputPortArray": [
+            {
+                "portIndex": 0,
+                "tesseraId": "b6ea30bd-d3be-4884-a499-0e0f403a5886"
+            }
+        ],
+        "tesseraId": "7fbab050-ff44-47e5-8ebc-0596c032c577",
+        "tesseraSettingsJson": "",
+        "tesseraType": "LogTessera",
+        "tesseraVisual": {
+            "x": 234,
+            "y": 238
+        }
+    },
+    {
+        "inputPortArray": [],
+        "outputPortArray": [
+            {
+                "portIndex": 0,
+                "tesseraId": "7fbab050-ff44-47e5-8ebc-0596c032c577"
+            }
+        ],
+        "tesseraId": "3700f662-e6ea-41fc-bb0e-b2e9dc01ee71",
+        "tesseraSettingsJson": "",
+        "tesseraType": "LightTessera",
+        "tesseraVisual": {
+            "x": 113,
+            "y": 245
+        }
+    },
+    {
+        "inputPortArray": [
+            {
+                "portIndex": 0,
+                "tesseraId": "7fbab050-ff44-47e5-8ebc-0596c032c577"
+            }
+        ],
+        "outputPortArray": [],
+        "tesseraId": "b6ea30bd-d3be-4884-a499-0e0f403a5886",
+        "tesseraSettingsJson": "{\"code\":\"console.log(\\\"Hello, World!\\\")\"}",
+        "tesseraType": "ScriptTessera",
+        "tesseraVisual": {
+            "x": 394,
+            "y": 241
+        }
+    }
+]

@@ -2,10 +2,10 @@ import { CSSResult, LitElement, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 
-@customElement('node-core-component')
-export class NodeCoreComponent extends LitElement {
+@customElement('tessera-core-component')
+export class TesseraCoreComponent extends LitElement {
     static override styles: CSSResult = css`
-        node-core-component {
+        tessera-core-component {
             align-items: center;
             background-color: var(--background-day);
             border: 1px solid var(--border-day);
@@ -18,7 +18,7 @@ export class NodeCoreComponent extends LitElement {
         }
 
         @media (prefers-color-scheme: dark) {
-            node-core-component {
+            tessera-core-component {
                 background-color: var(--background-night);
                 border-color: var(--border-night);
             }

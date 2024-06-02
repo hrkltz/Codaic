@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }) {
-                            Text(text = "Project 01")
+                            Text(text = "01")
                         }
                         Button(onClick = {
                             // Launch a coroutine
@@ -62,7 +62,22 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }) {
-                            Text(text = "Project 02")
+                            Text(text = "02")
+                        }
+                        Button(onClick = {
+                            // Launch a coroutine
+                            lifecycleScope.launch {
+                                val projectInstance = Project.getInstance()
+
+                                if (projectInstance.isRunning) {
+                                    projectInstance.stop()
+                                } else {
+                                    projectInstance.init("03")
+                                    projectInstance.start()
+                                }
+                            }
+                        }) {
+                            Text(text = "03")
                         }
                         Button(onClick = {
                             // Launch a coroutine
@@ -77,7 +92,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }) {
-                            Text(text = "Project 04")
+                            Text(text = "04")
                         }
                         Button(onClick = {
                             // Launch a coroutine
@@ -92,7 +107,22 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }) {
-                            Text(text = "Project 05")
+                            Text(text = "05")
+                        }
+                        Button(onClick = {
+                            // Launch a coroutine
+                            lifecycleScope.launch {
+                                val projectInstance = Project.getInstance()
+
+                                if (projectInstance.isRunning) {
+                                    projectInstance.stop()
+                                } else {
+                                    projectInstance.init("x1")
+                                    projectInstance.start()
+                                }
+                            }
+                        }) {
+                            Text(text = "x1")
                         }
                     }
                 }

@@ -1,8 +1,9 @@
-package io.hrkltz.codaic.node
+package io.hrkltz.codaic.tessera
 import android.util.Log
 import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor
 import com.caoccao.javet.interop.V8Host
 import com.caoccao.javet.interop.V8Runtime
+import com.google.gson.Gson
 import io.hrkltz.codaic.JavetExtension
 import io.hrkltz.codaic.Project
 import kotlinx.coroutines.GlobalScope
@@ -13,33 +14,34 @@ import kotlinx.coroutines.yield
 import kotlinx.serialization.Serializable
 
 
-class ScriptStartNode: Node() {
+class ScriptStartTessera: Tessera() {
     @Serializable
-    data class NodeSettings(var code: String = "")
-    lateinit var nodeSettings: NodeSettings
+    data class ScriptStartTesseraSettings(var code: String = "")
     private lateinit var _job: Job
     private lateinit var _v8Runtime: V8Runtime
+    private lateinit var _code: String
 
 
     override fun start() {
-        Log.i("Codaic", "ScriptStartNode.start()")
+        Log.i("Codaic", "ScriptStartTessera.start()")
+        _code =  Gson().fromJson(super.tesseraSettingsJson, ScriptStartTesseraSettings::class.java).code
         worker()
     }
 
 
     override fun stop() {
-        Log.i("Codaic", "ScriptStartNode.stop()")
+        Log.i("Codaic", "ScriptStartTessera.stop()")
         runBlocking {
             _job.cancel()
-            _v8Runtime.terminateExecution()
-            _v8Runtime.throwError(true)
+            //_v8Runtime.terminateExecution()
+            //_v8Runtime.throwError(true)
             _job.join()
         }
     }
 
 
     override fun worker() {
-        Log.i("Codaic", "ScriptStartNode.worker()")
+        Log.i("Codaic", "ScriptStartTessera.worker()")
         // lifecycleScope.launch { ?
         _job = GlobalScope.launch {
             while (true) {
@@ -56,15 +58,15 @@ class ScriptStartNode: Node() {
 
                     // Execute the code
                     try {
-                        val result = it.getExecutor(nodeSettings.code).executeObject<Any>()
+                        val result = it.getExecutor(_code).executeObject<Any>()
                         // Unregister console.
                         JavetStandardConsoleInterceptor(it).unregister(it.globalObject)
                         // Notify V8 to perform GC. (Optional)
                         it.lowMemoryNotification()
                         yield()
-                        if (nodeOutputPortArray[0] != null)
-                            Project.getInstance().sendData(nodeOutputPortArray[0]!!.nodeId,
-                                nodeOutputPortArray[0]!!.inputIndex, result)
+                        if (outputPortArray[0] != null)
+                            Project.getInstance().sendData(outputPortArray[0]!!.tesseraId,
+                                outputPortArray[0]!!.inputIndex, result)
                         // Just because Kotlin is strange: "'if' must have both main and 'else' branches if used as an expression"
                         else ""
                     }

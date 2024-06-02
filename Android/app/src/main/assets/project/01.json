@@ -1,12 +1,10 @@
 [
   {
-    "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404",
-    "nodeType": "ScriptStartNode",
-    "nodeInputPortArray": null,
-    "nodeOutputPortArray": [ null ],
-    "nodeSettings": {
-      "code": "Codaic.sleep(500); console.log('Hello World!');"
-    },
-    "nodeVisual": { "x": 100, "y": 100 }
+    "inputPortArray": null,
+    "outputPortArray": [ null ],
+    "tesseraId": "00000000-0000-0000-0000-000000000001",
+    "tesseraSettingsJson": "{\"code\":\"Codaic.sleep(500); console.log('Hello World!');\"}",
+    "tesseraType": "ScriptStartTessera",
+    "tesseraVisual": { "x": 100, "y": 100 }
   }
 ]

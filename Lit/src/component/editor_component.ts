@@ -1,15 +1,13 @@
-import { AddNodeDialog } from '../dialog/add_node_dialog';
+import { AddTesseraDialog } from '../dialog/add_tessera_dialog';
 import { CSSResultGroup, LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { IndexedDBUtil } from '../util/indexeddb_util';
-import { MergeNode } from '../node/merge_node';
-import { NodeCoreComponent } from './node_core_component';
-import { NodeInputPortComponent } from './node_input_port_component';
-import { NodeObject } from '../object/node_object';
-import { NodeOutputPortComponent } from './node_output_port_component';
-import { ProjectObject } from '../object/project_object';
-import { ScriptNode } from '../node/script_node';
-import { StartSourceNode } from '../node/start_source_node';
+import { TesseraCoreComponent } from './tessera_core_component';
+import { TesseraInputPortComponent } from './tessera_input_port_component';
+import { TesseraOutputPortComponent } from './tessera_output_port_component';
+import { Tessera } from '../tessera/tessera';
+import { TesseraDto, TesseraPort, TesseraVisual } from '../tessera/tessera_dto';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @customElement('editor-component')
@@ -30,14 +28,12 @@ export class EditorComponent extends LitElement {
                 z-index: 10;
             }
         `,
-        // Node component styles. (Note: The styles are not encapsulated in the shadow DOM as we don't use shadow DOM.)
-        NodeOutputPortComponent.styles,
-        NodeInputPortComponent.styles,
-        NodeCoreComponent.styles,
-        // Node styles. (Note: The styles are not encapsulated in the shadow DOM as we don't use shadow DOM.)
-        MergeNode.styles,
-        ScriptNode.styles,
-        StartSourceNode.styles,
+        // Tessera component styles. (Note: The styles are not encapsulated in the shadow DOM as we don't use shadow DOM.)
+        TesseraOutputPortComponent.styles,
+        TesseraInputPortComponent.styles,
+        TesseraCoreComponent.styles,
+        // Tessera styles. (Note: The styles are not encapsulated in the shadow DOM as we don't use shadow DOM.)
+        Tessera.styles,
     ];
 
     
@@ -101,7 +97,7 @@ export class EditorComponent extends LitElement {
 
 
     public onmousemove: ((this: GlobalEventHandlers, ev: MouseEvent) => any) = (event: MouseEvent) => {
-        // Currently only needed to allow placing a new node at the cursor position.
+        // Currently only needed to allow placing a new tessera at the cursor position.
         this._mousePositionX = event.clientX;
         this._mousePositionY = event.clientY;
 
@@ -115,11 +111,11 @@ export class EditorComponent extends LitElement {
                     case 'EDITOR-COMPONENT':
                         this._transformRelative(event.clientX  - this._previousMouseEvent!.clientX, event.clientY - this._previousMouseEvent!.clientY);
                         break;
-                    case 'NODE-CORE-COMPONENT':
-                        this._moveNodeRelative(this._clickedElement.parentElement! as any, event.clientX  - this._previousMouseEvent!.clientX, event.clientY - this._previousMouseEvent!.clientY);
+                    case 'TESSERA-CORE-COMPONENT':
+                        this._moveTesseraRelative(this._clickedElement.parentElement! as any, event.clientX  - this._previousMouseEvent!.clientX, event.clientY - this._previousMouseEvent!.clientY);
                         break;
-                    case 'NODE-OUTPUT-PORT-COMPONENT':
-                        this._drawGhostConnection(this._clickedElement.element! as NodeOutputPortComponent, event.clientX, event.clientY);
+                    case 'TESSERA-OUTPUT-PORT-COMPONENT':
+                        this._drawGhostConnection(this._clickedElement.element! as TesseraOutputPortComponent, event.clientX, event.clientY);
                         break;
                 };
 
@@ -134,12 +130,12 @@ export class EditorComponent extends LitElement {
             case 0:
                 switch (this._clickedElement.element!.tagName) {
                     case 'EDITOR-COMPONENT': break;
-                    case 'NODE-CORE-COMPONENT': break;
-                    case 'NODE-OUTPUT-PORT-COMPONENT':
+                    case 'TESSERA-CORE-COMPONENT': break;
+                    case 'TESSERA-OUTPUT-PORT-COMPONENT':
                         this._clearGhostConnection();
 
-                        if (this._hoveredElement.element!.tagName === 'NODE-INPUT-PORT-COMPONENT') {
-                            this._createConnection(this._clickedElement.element! as NodeOutputPortComponent, this._hoveredElement.element! as NodeInputPortComponent);
+                        if (this._hoveredElement.element!.tagName === 'TESSERA-INPUT-PORT-COMPONENT') {
+                            this._createConnection(this._clickedElement.element! as TesseraOutputPortComponent, this._hoveredElement.element! as TesseraInputPortComponent);
                         };
                         break;
                 };
@@ -173,32 +169,32 @@ export class EditorComponent extends LitElement {
                         this._resetView();
                         break;
                     case 'a':
-                        this._addNode(this._mousePositionX, this._mousePositionY);
+                        this._addTessera(this._mousePositionX, this._mousePositionY);
                         break;
                     case 's':
                         this._saveProject();
                         break;
-                    case 'l':
-                        this._loadProject();
-                        break;
+                    //case 'l':
+                    //    this._loadProject();
+                    //    break;
                 };
                 break;
-            case 'NODE-CORE-COMPONENT':
+            case 'TESSERA-CORE-COMPONENT':
                 switch (event.key) {
                     case 'ArrowUp':
-                        this._moveNodeRelative(this._hoveredElement.parentElement as any, 0, -25);
+                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, 0, -25);
                         break;
                     case 'ArrowDown':
-                        this._moveNodeRelative(this._hoveredElement.parentElement as any, 0, 25);
+                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, 0, 25);
                         break;
                     case 'ArrowLeft':
-                        this._moveNodeRelative(this._hoveredElement.parentElement as any, -25, 0);
+                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, -25, 0);
                         break;
                     case 'ArrowRight':
-                        this._moveNodeRelative(this._hoveredElement.parentElement as any, 25, 0);
+                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, 25, 0);
                         break;
                     case 'd':
-                        this._deleteNode(this._hoveredElement.parentElement as any);
+                        this._deleteTessera(this._hoveredElement.parentElement as any);
                         break;
                 };
                 break;
@@ -235,72 +231,43 @@ export class EditorComponent extends LitElement {
     };
 
 
-    private async _addNode(x: number, y: number) {
-        const result = await AddNodeDialog.open();
+    private async _addTessera(x: number, y: number) {
+        const result = await AddTesseraDialog.open();
+        let cX: number = this._calculateXAbsolute(x);
+        let cY: number = this._calculateYAbsolute(y);
 
-        switch (result) {
-            case 'MergeNode': {
-                let cX: number = this._calculateXAbsolute(x);
-                let cY: number = this._calculateYAbsolute(y);
-                // Create a new node component and append it to the transformer.
-                const mergeNode = new MergeNode();
-                let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-                foreignObject.style.boxSizing = 'border-box';
-                foreignObject.setAttribute('x', String(cX-55));
-                foreignObject.setAttribute('y', String(cY-55));
-                foreignObject.setAttribute('width', mergeNode.width);
-                foreignObject.setAttribute('height', mergeNode.height);
-                foreignObject.appendChild(mergeNode);
-                this._transformer.appendChild(foreignObject);
-            } break;
-            case 'StartSourceNode': {
-                let cX: number = this._calculateXAbsolute(x);
-                let cY: number = this._calculateYAbsolute(y);
-                // Create a new node component and append it to the transformer.
-                const startSourceNode = new StartSourceNode();
-                let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-                foreignObject.style.boxSizing = 'border-box';
-                foreignObject.setAttribute('x', String(cX-55));
-                foreignObject.setAttribute('y', String(cY-55));
-                foreignObject.setAttribute('width', startSourceNode.width);
-                foreignObject.setAttribute('height', startSourceNode.height);
-                foreignObject.appendChild(startSourceNode);
-                this._transformer.appendChild(foreignObject);
-            } break;
-            case 'ScriptNode': {
-                let cX: number = this._calculateXAbsolute(x);
-                let cY: number = this._calculateYAbsolute(y);
-                // Create a new node component and append it to the transformer.
-                const scriptNode = new ScriptNode();
-                let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-                foreignObject.style.boxSizing = 'border-box';
-                foreignObject.setAttribute('x', String(cX-55));
-                foreignObject.setAttribute('y', String(cY-55));
-                foreignObject.setAttribute('width', scriptNode.width);
-                foreignObject.setAttribute('height', scriptNode.height);
-                foreignObject.appendChild(scriptNode);
-                this._transformer.appendChild(foreignObject);
-            } break;
-        };
+        if (result === null) return;
+
+        // Create a new tessera component and append it to the transformer.
+        const tessera = new Tessera(uuidv4(), result);
+        let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        foreignObject.style.boxSizing = 'border-box';
+        foreignObject.setAttribute('x', String(cX-55));
+        foreignObject.setAttribute('y', String(cY-55));
+        foreignObject.setAttribute('width', tessera.width);
+        foreignObject.setAttribute('height', tessera.height);
+        foreignObject.appendChild(tessera);
+        this._transformer.appendChild(foreignObject);
         return;
     };
 
     
-    private _moveNodeRelative(node: any, dX: number, dY: number) {
-        // Move the node component.
-        const foreignObject = node.parentElement;
+    private _moveTesseraRelative(tessera: any, dX: number, dY: number) {
+        // Move the tessera component.
+        const foreignObject = tessera.parentElement;
+        console.log(foreignObject);
         const x = Number(foreignObject!.getAttribute('x'));
         const y = Number(foreignObject!.getAttribute('y'));
         foreignObject!.setAttribute('x', `${x + dX/this._zoom}`);
         foreignObject!.setAttribute('y', `${y + dY/this._zoom}`);
         // Move all connected lines.
         // OPTIMIZE: Do this just once during the mousedown event.
-        const connectedLineArray = [].filter.call(this.shadowRoot!.querySelectorAll('line'), (e: SVGLineElement) => e.id.includes(node.id)) as SVGLineElement[];
+        const connectedLineArray = [].filter.call(this.shadowRoot!.querySelectorAll('line'), (e: SVGLineElement) => e.id.includes(tessera.id)) as SVGLineElement[];
         
         for (let i = 0; i < connectedLineArray.length; i++) {
             const line = connectedLineArray[i];
 
-            if (line.id.startsWith(node.id)) {
+            if (line.id.startsWith(tessera.tesseraId)) {
                 const x1 = Number(line.getAttribute('x1'));
                 const y1 = Number(line.getAttribute('y1'));
                 line.setAttribute('x1', `${x1 + dX/this._zoom}`);
@@ -315,13 +282,13 @@ export class EditorComponent extends LitElement {
     };
 
 
-    private _drawGhostConnection(nodeOutputPortComponent: NodeOutputPortComponent, x: number, y: number) {
+    private _drawGhostConnection(tesseraOutputPortComponent: TesseraOutputPortComponent, x: number, y: number) {
         if (this._ghostConnection === null) {
             this._ghostConnection = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             this._ghostConnection.style.stroke = 'black';
             this._ghostConnection.style.strokeWidth = '2';
-            this._ghostConnection.setAttribute('x1', String(this._calculateXAbsolute(nodeOutputPortComponent.cX)));
-            this._ghostConnection.setAttribute('y1', String(this._calculateYAbsolute(nodeOutputPortComponent.cY)));
+            this._ghostConnection.setAttribute('x1', String(this._calculateXAbsolute(tesseraOutputPortComponent.cX)));
+            this._ghostConnection.setAttribute('y1', String(this._calculateYAbsolute(tesseraOutputPortComponent.cY)));
             this._transformer.appendChild(this._ghostConnection);
         };
 
@@ -330,9 +297,11 @@ export class EditorComponent extends LitElement {
     };
 
 
-    private _createConnection(nodeOutputPortComponent: NodeOutputPortComponent, nodeInputPortComponent: NodeInputPortComponent) {
-        // Don't connect if both ports are part of the same node.
-        if (nodeOutputPortComponent.id.split('.')[0] === nodeInputPortComponent.id.split('.')[0]) {
+    private _createConnection(tesseraOutputPortComponent: TesseraOutputPortComponent, tesseraInputPortComponent: TesseraInputPortComponent) {
+        console.log('Create connection')
+        console.log(tesseraOutputPortComponent, tesseraInputPortComponent)
+        // Don't connect if both ports are part of the same tessera.
+        if (tesseraOutputPortComponent.id.split('.')[0] === tesseraInputPortComponent.id.split('.')[0]) {
             return;
         };
 
@@ -340,11 +309,11 @@ export class EditorComponent extends LitElement {
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.style.stroke = 'blue';
         line.style.strokeWidth = '2';
-        line.id = `${nodeOutputPortComponent.id}:${nodeInputPortComponent.id}`;
-        line.setAttribute('x1', String(this._calculateXAbsolute(nodeOutputPortComponent.cX)));
-        line.setAttribute('y1', String(this._calculateYAbsolute(nodeOutputPortComponent.cY)));
-        line.setAttribute('x2', String(this._calculateXAbsolute(nodeInputPortComponent.cX)));
-        line.setAttribute('y2', String(this._calculateYAbsolute(nodeInputPortComponent.cY)));
+        line.id = `${tesseraOutputPortComponent.id}:${tesseraInputPortComponent.id}`;
+        line.setAttribute('x1', String(this._calculateXAbsolute(tesseraOutputPortComponent.cX)));
+        line.setAttribute('y1', String(this._calculateYAbsolute(tesseraOutputPortComponent.cY)));
+        line.setAttribute('x2', String(this._calculateXAbsolute(tesseraInputPortComponent.cX)));
+        line.setAttribute('y2', String(this._calculateYAbsolute(tesseraInputPortComponent.cY)));
         this._transformer.appendChild(line);
     };
 
@@ -355,11 +324,11 @@ export class EditorComponent extends LitElement {
     };
 
 
-    // TODO: Replace any with a general Node element.
-    private _deleteNode(node: any) {
-        const foreignObject = node.parentElement;
+    // TODO: Replace any with a general Tessera element.
+    private _deleteTessera(tessera: any) {
+        const foreignObject = tessera.parentElement;
         //// ShadowRoot again. :/ Let's dissable it.
-        const connectedLineArray = [].filter.call(this.shadowRoot!.querySelectorAll('line'), (e: SVGLineElement) => e.id.includes(node.id));
+        const connectedLineArray = [].filter.call(this.shadowRoot!.querySelectorAll('line'), (e: SVGLineElement) => e.id.includes(tessera.id));
 
         for (let i = 0; i < connectedLineArray.length; i++) {
             this._transformer.removeChild(connectedLineArray[i]);
@@ -384,15 +353,15 @@ export class EditorComponent extends LitElement {
     private _elementsFromPoint(x: number, y: number): Element[] {
         let elementArray = [];
         const shadowRootElementArray = this.shadowRoot!.elementsFromPoint(x, y)!;
-        const node = shadowRootElementArray.find((e) => e.tagName === 'SCRIPT-NODE' || e.tagName === 'START-SOURCE-NODE' || e.tagName === 'SCRIPT-NODE' || e.tagName === 'MERGE-NODE');
+        const tessera = shadowRootElementArray.find((e) => e.tagName === 'CDC-TESSERA');
         
-        if (node) {
-            elementArray.push(node);
+        if (tessera) {
+            elementArray.push(tessera);
         
-            let nodePartComponent = shadowRootElementArray.find((e) => e.tagName === 'NODE-INPUT-PORT-COMPONENT' || e.tagName === 'NODE-CORE-COMPONENT' || e.tagName === 'NODE-OUTPUT-PORT-COMPONENT');
+            let tesseraPartComponent = shadowRootElementArray.find((e) => e.tagName === 'TESSERA-INPUT-PORT-COMPONENT' || e.tagName === 'TESSERA-CORE-COMPONENT' || e.tagName === 'TESSERA-OUTPUT-PORT-COMPONENT');
             
-            if (nodePartComponent) {
-                elementArray.push(nodePartComponent);
+            if (tesseraPartComponent) {
+                elementArray.push(tesseraPartComponent);
             };
         };
 
@@ -402,44 +371,29 @@ export class EditorComponent extends LitElement {
 
     private _saveProject(): void {
         // Serialize the graph.
-        const childNodeArray = this._transformer.childNodes;
-        const foreignObjectArray = [].filter.call(childNodeArray, (e: SVGForeignObjectElement) => e.tagName === 'foreignObject') as SVGForeignObjectElement[];
-        const lineArray = [].filter.call(childNodeArray, (e: SVGLineElement) => e.tagName === 'line') as SVGLineElement[];
-        const projectObject: ProjectObject = new ProjectObject();
-        // Create an array of nodes.
+        const childTesseraArray = this._transformer.childNodes;
+        const foreignObjectArray = [].filter.call(childTesseraArray, (e: SVGForeignObjectElement) => e.tagName === 'foreignObject') as SVGForeignObjectElement[];
+        const lineArray = [].filter.call(childTesseraArray, (e: SVGLineElement) => e.tagName === 'line') as SVGLineElement[];
+        const projectObject: Array<TesseraDto> = [];
+        // Create an array of tesseras.
         foreignObjectArray.forEach(foreignObject => {
-            console.log((foreignObject.childNodes[0] as HTMLElement).tagName);
-            switch ((foreignObject.childNodes[0] as HTMLElement).tagName.toLowerCase()) {
-                case 'merge-node': {
-                    const mergeNode = foreignObject.childNodes[0] as MergeNode;
-                    const nodeObject = new NodeObject(mergeNode.id, 'merge-node', Number.parseInt(foreignObject.getAttribute('x')!), Number.parseInt(foreignObject.getAttribute('y')!));
-                    nodeObject.inputPortArray = [[], [], []];
-                    nodeObject.outputPortArray = [[], [], []];
-                    projectObject.nodeArray.push(nodeObject);
-                } break;
-                case 'start-source-node': {
-                    const startsourceNode = foreignObject.childNodes[0] as StartSourceNode;
-                    const nodeObject = new NodeObject(startsourceNode.id, 'start-source-node', Number.parseInt(foreignObject.getAttribute('x')!), Number.parseInt(foreignObject.getAttribute('y')!));
-                    nodeObject.outputPortArray.push([]);
-                    projectObject.nodeArray.push(nodeObject);
-                } break;
-                case 'script-node': {
-                    const scriptNode = foreignObject.childNodes[0] as ScriptNode;
-                    const nodeObject = new NodeObject(scriptNode.id, 'script-node', Number.parseInt(foreignObject.getAttribute('x')!), Number.parseInt(foreignObject.getAttribute('y')!));
-                    nodeObject.inputPortArray = [[], [], []];
-                    nodeObject.outputPortArray = [[], [], []];
-                    nodeObject.contentJson = '{"code": ""}';
-                    projectObject.nodeArray.push(nodeObject);
-                } break;
-            };
+            const tessera = foreignObject.childNodes[0] as Tessera;
+            const tesseraDto = new TesseraDto();
+            tesseraDto.tesseraId = tessera.tesseraId;
+            tesseraDto.tesseraType = tessera.tesseraType;
+            tesseraDto.tesseraSettingsJson = tessera.tesseraSettingsJson;
+            tesseraDto.tesseraVisual = new TesseraVisual(Number.parseInt(foreignObject.getAttribute('x')!), Number.parseInt(foreignObject.getAttribute('y')!));
+            projectObject.push(tesseraDto);
         });
         // Store the connections.
         lineArray.forEach(line => {
             const splittedLineId = line.id.split(':');
-            ([].find.call(projectObject.nodeArray, (e: NodeObject) => splittedLineId[0].startsWith(e.id))! as NodeObject)
-                .outputPortArray[Number(splittedLineId[0].split('.')[1])].push(splittedLineId[1]);
-            ([].find.call(projectObject.nodeArray, (e: NodeObject) => splittedLineId[1].startsWith(e.id))! as NodeObject)
-                .inputPortArray[Number(splittedLineId[1].split('.')[1])].push(splittedLineId[0]);
+            const splittedLineId0 = splittedLineId[0].split('.');
+            const splittedLineId1 = splittedLineId[1].split('.');
+            ([].find.call(projectObject, (e: TesseraDto) => splittedLineId0[0].startsWith(e.tesseraId))! as TesseraDto)
+                .outputPortArray[Number(splittedLineId0[1])] = new TesseraPort(splittedLineId1[0], Number(splittedLineId1[1]));
+            ([].find.call(projectObject, (e: TesseraDto) => splittedLineId1[0].startsWith(e.tesseraId))! as TesseraDto)
+                .inputPortArray[Number(splittedLineId1[1])] = new TesseraPort(splittedLineId0[0], Number(splittedLineId0[1]));
         });
 
         // Save the serialized graph to IndexedDB.
@@ -455,72 +409,100 @@ export class EditorComponent extends LitElement {
     };
 
 
-    private _loadProject(): void {
+    /*private _loadProject(): void {
         // Load the serialized graph from IndexedDB.
         IndexedDBUtil.openDatabase('editor', 1, (db) => {
             db.createObjectStore('editor');
         }).then((db) => {
             IndexedDBUtil.openObjectStore(db, 'editor', 'readwrite').then((objectStore) => {
-                IndexedDBUtil.getRecord(objectStore, 'test').then((projectObject: ProjectObject) => {
+                IndexedDBUtil.getRecord(objectStore, 'test').then((projectObject: Array<TesseraObject>) => {
                     // Deserialize the graph.
-                    projectObject.nodeArray.forEach(nodeObject => {
-                        // Create a new node component and append it to the transformer.
-                        switch (nodeObject.type) {
-                            case 'merge-node': {
-                                const mergeNode = new MergeNode();
-                                mergeNode.id = nodeObject.id;
-                                mergeNode.x = nodeObject.x;
-                                mergeNode.y = nodeObject.y;
+                    projectObject.forEach(tesseraObject => {
+                        // Create a new tessera component and append it to the transformer.
+                        switch (tesseraObject.tesseraType) {
+                            //case 'merge-tessera': {
+                            //    const mergeTessera = new MergeTessera();
+                            //    mergeTessera.id = tesseraObject.tesseraId;
+                            //    mergeTessera.x = tesseraObject.tesseraVisual.x;
+                            //    mergeTessera.y = tesseraObject.tesseraVisual.y;
+                            //    let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+                            //    foreignObject.style.boxSizing = 'border-box';
+                            //    foreignObject.setAttribute('x', String(tesseraObject.tesseraVisual.x));
+                            //    foreignObject.setAttribute('y', String(tesseraObject.tesseraVisual.y));
+                            //    foreignObject.setAttribute('width', mergeTessera.width);
+                            //    foreignObject.setAttribute('height', mergeTessera.height);
+                            //    foreignObject.appendChild(mergeTessera);
+                            //    this._transformer.appendChild(foreignObject);
+                            //} break;
+                            case 'script-start-tessera': {
+                                const scriptStartTessera = new ScriptStartTessera();
+                                scriptStartTessera.id = tesseraObject.tesseraId;
+                                scriptStartTessera.x = tesseraObject.tesseraVisual.x;
+                                scriptStartTessera.y = tesseraObject.tesseraVisual.y;
                                 let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
                                 foreignObject.style.boxSizing = 'border-box';
-                                foreignObject.setAttribute('x', String(nodeObject.x));
-                                foreignObject.setAttribute('y', String(nodeObject.y));
-                                foreignObject.setAttribute('width', mergeNode.width);
-                                foreignObject.setAttribute('height', mergeNode.height);
-                                foreignObject.appendChild(mergeNode);
+                                foreignObject.setAttribute('x', String(tesseraObject.tesseraVisual.x));
+                                foreignObject.setAttribute('y', String(tesseraObject.tesseraVisual.y));
+                                foreignObject.setAttribute('width', scriptStartTessera.width);
+                                foreignObject.setAttribute('height', scriptStartTessera.height);
+                                foreignObject.appendChild(scriptStartTessera);
                                 this._transformer.appendChild(foreignObject);
                             } break;
-                            case 'start-source-node': {
-                                const startsourceNode = new StartSourceNode();
-                                startsourceNode.id = nodeObject.id;
-                                startsourceNode.x = nodeObject.x;
-                                startsourceNode.y = nodeObject.y;
+                            case 'script-tessera': {
+                                const scriptTessera = new ScriptTessera();
+                                scriptTessera.id = tesseraObject.tesseraId;
+                                scriptTessera.x = tesseraObject.tesseraVisual.x;
+                                scriptTessera.y = tesseraObject.tesseraVisual.y;
                                 let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
                                 foreignObject.style.boxSizing = 'border-box';
-                                foreignObject.setAttribute('x', String(nodeObject.x));
-                                foreignObject.setAttribute('y', String(nodeObject.y));
-                                foreignObject.setAttribute('width', startsourceNode.width);
-                                foreignObject.setAttribute('height', startsourceNode.height);
-                                foreignObject.appendChild(startsourceNode);
+                                foreignObject.setAttribute('x', String(tesseraObject.tesseraVisual.x));
+                                foreignObject.setAttribute('y', String(tesseraObject.tesseraVisual.y));
+                                foreignObject.setAttribute('width', scriptTessera.width);
+                                foreignObject.setAttribute('height', scriptTessera.height);
+                                foreignObject.appendChild(scriptTessera);
                                 this._transformer.appendChild(foreignObject);
                             } break;
-                            case 'script-node': {
-                                const scriptNode = new ScriptNode();
-                                scriptNode.id = nodeObject.id;
-                                scriptNode.x = nodeObject.x;
-                                scriptNode.y = nodeObject.y;
+                            case 'log-tessera': {
+                                const logTessera = new LogTessera();
+                                logTessera.id = tesseraObject.tesseraId;
+                                logTessera.x = tesseraObject.tesseraVisual.x;
+                                logTessera.y = tesseraObject.tesseraVisual.y;
                                 let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
                                 foreignObject.style.boxSizing = 'border-box';
-                                foreignObject.setAttribute('x', String(nodeObject.x));
-                                foreignObject.setAttribute('y', String(nodeObject.y));
-                                foreignObject.setAttribute('width', scriptNode.width);
-                                foreignObject.setAttribute('height', scriptNode.height);
-                                foreignObject.appendChild(scriptNode);
+                                foreignObject.setAttribute('x', String(tesseraObject.tesseraVisual.x));
+                                foreignObject.setAttribute('y', String(tesseraObject.tesseraVisual.y));
+                                foreignObject.setAttribute('width', logTessera.width);
+                                foreignObject.setAttribute('height', logTessera.height);
+                                foreignObject.appendChild(logTessera);
+                                this._transformer.appendChild(foreignObject);
+                            } break;
+                            case 'light-tessera': {
+                                const lightTessera = new LightTessera();
+                                lightTessera.id = tesseraObject.tesseraId;
+                                lightTessera.x = tesseraObject.tesseraVisual.x;
+                                lightTessera.y = tesseraObject.tesseraVisual.y;
+                                let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+                                foreignObject.style.boxSizing = 'border-box';
+                                foreignObject.setAttribute('x', String(tesseraObject.tesseraVisual.x));
+                                foreignObject.setAttribute('y', String(tesseraObject.tesseraVisual.y));
+                                foreignObject.setAttribute('width', lightTessera.width);
+                                foreignObject.setAttribute('height', lightTessera.height);
+                                foreignObject.appendChild(lightTessera);
                                 this._transformer.appendChild(foreignObject);
                             } break;
                         };
 
                         // Create the connections.
-                        //nodeObject.outputPortArray.forEach((outputPortArray, outputPortIndex) => {
+                        //tesseraObject.outputPortArray.forEach((outputPortArray, outputPortIndex) => {
                         //    outputPortArray.forEach(outputPortId => {
                         //        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                         //        line.style.stroke = 'blue';
                         //        line.style.strokeWidth = '2';
-                        //        line.id = `${nodeObject.id}.${outputPortIndex}:${outputPortId}`;
-                        //        line.setAttribute('x1', String((this._transformer.querySelector(`#${outputPortId}`) as NodeOutputPortComponent).cX));
-                        //        line.setAttribute('y1', String((this._transformer.querySelector(`#${outputPortId}`) as NodeOutputPortComponent).cY));
-                        //        line.setAttribute('x2', String((this._transformer.querySelector(`#${inputPortId}`) as NodeInputPortComponent).cX));
-                        //        line.setAttribute('y2', String((this._transformer.querySelector(`#${inputPortId}`) as NodeInputPortComponent).cY));
+                        //        line.id = `${tesseraObject.id}.${outputPortIndex}:${outputPortId}`;
+                        //        line.setAttribute('x1', String((this._transformer.querySelector(`#${outputPortId}`) as TesseraOutputPortComponent).cX));
+                        //        line.setAttribute('y1', String((this._transformer.querySelector(`#${outputPortId}`) as TesseraOutputPortComponent).cY));
+                        //        line.setAttribute('x2', String((this._transformer.querySelector(`#${inputPortId}`) as TesseraInputPortComponent).cX));
+                        //        line.setAttribute('y2', String((this._transformer.querySelector(`#${inputPortId}`) as TesseraInputPortComponent).cY));
                         //        this._transformer.appendChild(line);
                         //    });
                         //});
@@ -528,5 +510,5 @@ export class EditorComponent extends LitElement {
                 });
             });
         });
-    };
+    };*/
 };

@@ -2,8 +2,8 @@ import { CSSResult, LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 
-@customElement('add-node-dialog')
-export class AddNodeDialog extends LitElement {
+@customElement('add-tessera-dialog')
+export class AddTesseraDialog extends LitElement {
     static override styles: CSSResult = css`
         :host {
             z-index: 999;
@@ -42,8 +42,8 @@ export class AddNodeDialog extends LitElement {
     };
 
 
-    static async open() {
-        const dialog = new AddNodeDialog();
+    static async open(): Promise<string> {
+        const dialog = new AddTesseraDialog();
         document.body.appendChild(dialog);
 
         return new Promise((resolve) => {
@@ -63,10 +63,11 @@ export class AddNodeDialog extends LitElement {
     override render() {
         return html`
             <div>
-                <h1>Add Node</h1>
-                <button @click="${() => this._close('MergeNode')}">MergeNode</button>
-                <button @click="${() => this._close('ScriptNode')}">ScriptNode</button>
-                <button @click="${() => this._close('StartSourceNode')}">StartSourceNode</button>
+                <h1>Add Tessera</h1>
+                <button @click="${() => this._close('ScriptStartTessera')}">ScriptStartTessera</button>
+                <button @click="${() => this._close('ScriptTessera')}">ScriptTessera</button>
+                <button @click="${() => this._close('LogTessera')}">LogTessera</button>
+                <button @click="${() => this._close('LightTessera')}">LightTessera</button>
             </div>
         `;
     };

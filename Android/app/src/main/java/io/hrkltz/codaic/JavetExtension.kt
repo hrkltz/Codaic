@@ -9,7 +9,7 @@ import com.caoccao.javet.annotations.V8Function
 class JavetExtension {
     @V8Function(name = "sleep")
     fun sleep(millis: Long) {
-        Log.i("Codaic", "AnnotationBasedCallbackReceiver.sleep($millis)")
+        Log.i("Codaic", "JavetExtension.sleep($millis)")
         Thread.sleep(millis)
     }
 }

@@ -2,10 +2,10 @@ import { CSSResult, LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 
-@customElement('node-input-port-component')
-export class NodeInputPortComponent extends LitElement {
+@customElement('tessera-input-port-component')
+export class TesseraInputPortComponent extends LitElement {
     static override styles: CSSResult = css`
-        node-input-port-component {
+        tessera-input-port-component {
             display: block;
             height: 100%;
             width: 100%;

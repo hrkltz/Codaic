@@ -64,6 +64,7 @@ export class IndexedDBUtil {
         return new Promise((resolve, reject) => {
             const request = store.put(record, key);
             request.onsuccess = (_) => {
+                console.log(JSON.stringify(record))
                 resolve();
             };
             request.onerror = (_) => {
