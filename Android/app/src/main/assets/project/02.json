@@ -1,0 +1,47 @@
+[
+  {
+    "NodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404",
+    "NodeType": "ScriptStartNode",
+    "NodeSettings": {
+      "Code": "Codaic.sleep(500); console.log('Hello World!'); Math.floor(Math.random() * 2) == 1;",
+      "InputPortArray": null,
+      "OutputPortArray": [
+        [ "99a3b2b9-3d84-48bc-acf5-8f340f8caac6.0" ]
+      ]
+    },
+    "NodeVisual": {
+      "x": 100,
+      "y": 100
+    }
+  },
+  {
+    "NodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6",
+    "NodeType": "LogNode",
+    "NodeSettings": {
+      "InputPortArray": [
+        [ "b5522af7-c189-40bd-bc3b-71a6b74ca404.0" ]
+      ],
+      "OutputPortArray": [
+        [ "8v8fd7sd-d67a-4d5d-trfe-9f7f5fe7qcfd.0" ]
+      ]
+    },
+    "NodeVisual": {
+      "x": 100,
+      "y": 200
+    }
+  },
+  {
+    "NodeId": "8v8fd7sd-d67a-4d5d-trfe-9f7f5fe7qcfd",
+    "NodeType": "VibratorNode",
+    "NodeSettings": {
+      "InputPortArray": [
+        [ "99a3b2b9-3d84-48bc-acf5-8f340f8caac6.0" ]
+      ],
+      "OutputPortArray": null
+    },
+    "NodeVisual": {
+      "x": 100,
+      "y": 300
+    }
+  }
+]

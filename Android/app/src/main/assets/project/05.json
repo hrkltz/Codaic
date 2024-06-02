@@ -1,0 +1,19 @@
+[
+  {
+    "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404",
+    "nodeType": "LightNode",
+    "nodeInputPortArray": null,
+    "nodeOutputPortArray": [{ "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6", "inputIndex": 0 }],
+    "nodeVisual": { "x": 100, "y": 100 }
+  },
+  {
+    "nodeId": "99a3b2b9-3d84-48bc-acf5-8f340f8caac6",
+    "nodeType": "LogNode",
+    "nodeInputPortArray": [{ "nodeId": "b5522af7-c189-40bd-bc3b-71a6b74ca404", "outputIndex": 0 }],
+    "nodeOutputPortArray": [ null ],
+    "NodeVisual": {
+      "x": 100,
+      "y": 200
+    }
+  }
+]
