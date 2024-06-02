@@ -32,7 +32,6 @@ export class InfoComponent extends LitElement {
                 `;
             case 'MERGE-NODE':
             case 'SCRIPT-NODE':
-            case 'SCRIPT-NODE':
             case 'START-SOURCE-NODE':
                 return html`
                     <h2>Info Box</h2>
