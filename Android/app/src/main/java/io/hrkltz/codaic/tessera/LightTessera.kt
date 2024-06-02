@@ -25,7 +25,7 @@ class LightTessera : Tessera() {
             override fun onSensorChanged(event: SensorEvent) {
                 if (outputPortArray[0] != null)
                     Project.getInstance().sendData(outputPortArray[0]!!.tesseraId,
-                        outputPortArray[0]!!.inputIndex, event.values[0])
+                        outputPortArray[0]!!.portIndex, event.values[0])
             }
         }
         mSensorManager!!.registerListener(mSensorEventListener, mSensor, SENSOR_DELAY_FASTEST)

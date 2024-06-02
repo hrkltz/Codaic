@@ -20,6 +20,6 @@ class LogTessera : Tessera() {
 
         if (outputPortArray[0] != null)
             Project.getInstance().sendData(outputPortArray[0]!!.tesseraId,
-                outputPortArray[0]!!.inputIndex, inputPortArray[0]!!.data)
+                outputPortArray[0]!!.portIndex, inputPortArray[0]!!.data)
     }
 }

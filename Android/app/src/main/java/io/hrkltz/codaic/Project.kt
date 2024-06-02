@@ -55,11 +55,11 @@ class Project {
     }
 
 
-    fun sendData(tesseraId: String, inputIndex: Int, data: Any?) {
-        Log.i("Codaic", "Project.sendData($tesseraId, $inputIndex, $data)")
-        nodeMap[tesseraId]!!.inputPortArray[inputIndex]!!.data = data
+    fun sendData(tesseraId: String, portIndex: Int, data: Any?) {
+        Log.i("Codaic", "Project.sendData($tesseraId, $portIndex, $data)")
+        nodeMap[tesseraId]!!.inputPortArray[portIndex]!!.data = data
 
-        //if (nodeMap[tesseraId]!!.inputPortArray[inputIndex]!!.mode == "Active") {
+        //if (nodeMap[tesseraId]!!.inputPortArray[portIndex]!!.mode == "Active") {
             nodeMap[tesseraId]!!.worker()
         //}
     }

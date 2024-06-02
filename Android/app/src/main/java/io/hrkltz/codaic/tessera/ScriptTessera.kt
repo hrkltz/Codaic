@@ -66,7 +66,7 @@ class ScriptTessera: Tessera() {
                 it.lowMemoryNotification()
                 if (outputPortArray[0] != null)
                     Project.getInstance().sendData(outputPortArray[0]!!.tesseraId,
-                        outputPortArray[0]!!.inputIndex, result)
+                        outputPortArray[0]!!.portIndex, result)
                 // Just because Kotlin is strange: "'if' must have both main and 'else' branches if used as an expression"
                 else ""
             }

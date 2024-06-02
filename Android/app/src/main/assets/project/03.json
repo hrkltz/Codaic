@@ -3,21 +3,21 @@
     "tesseraId": "00000000-0000-0000-0000-000000000001",
     "tesseraType": "ScriptStartTessera",
     "inputPortArray": null,
-    "outputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000002", "inputIndex": 0 }],
+    "outputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000002", "portIndex": 0 }],
     "tesseraSettingsJson": "{\"code\":\"Codaic.sleep(500); Math.floor(Math.random() * 2) == 1;\"}",
     "tesseraVisual": { "x": 100, "y": 100 }
   },
   {
     "tesseraId": "00000000-0000-0000-0000-000000000002",
     "tesseraType": "LogTessera",
-    "inputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000001", "outputIndex": 0 }],
-    "outputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000003", "inputIndex": 0 }],
+    "inputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000001", "portIndex": 0 }],
+    "outputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000003", "portIndex": 0 }],
     "tesseraVisual": { "x": 100, "y": 200 }
   },
   {
     "tesseraId": "00000000-0000-0000-0000-000000000003",
     "tesseraType": "VibratorTessera",
-    "inputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000002", "outputIndex": 0 }],
+    "inputPortArray": [{ "tesseraId": "00000000-0000-0000-0000-000000000002", "portIndex": 0 }],
     "outputPortArray": null,
     "tesseraVisual": {
       "x": 100,
