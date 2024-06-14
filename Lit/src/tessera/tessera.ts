@@ -1,5 +1,6 @@
 import { CSSResult, LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { EditorDialog } from '../dialog/editor_dialog';
 
 
 @customElement('cdc-tessera')
@@ -78,6 +79,24 @@ export class Tessera extends LitElement {
                 this.outputPortArray = [null];
                 break;
         };
+    }
+
+    
+    public codaicKeyDown(event: KeyboardEvent) {
+        switch (event.key) {
+            case 'e':
+                switch (this.tesseraType) {
+                    case 'ScriptStartTessera':
+                    case 'ScriptTessera':
+                        EditorDialog.open(JSON.parse(this.tesseraSettingsJson).code).then((result) => {
+                            this.tesseraSettingsJson = JSON.stringify({
+                                code: result,
+                            });
+                        });
+                        break;
+                }
+                break;
+        }
     }
 
 

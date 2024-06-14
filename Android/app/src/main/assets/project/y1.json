@@ -1,0 +1,13 @@
+[
+  {
+    "inputPortArray": [],
+    "outputPortArray": [],
+    "tesseraId": "a298cfea-92fd-41f6-bc41-76abdc3f0399",
+    "tesseraSettingsJson": "{\"code\":\"console.log(\\\"Hello, World!\\\");\\n\\nCodaic.sleep(500);\"}",
+    "tesseraType": "ScriptStartTessera",
+    "tesseraVisual": {
+      "x": 400,
+      "y": 259
+    }
+  }
+]

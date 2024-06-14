@@ -59,12 +59,15 @@ export class EditorComponent extends LitElement {
         `;
     };
 
+    //@property({ attribute: "contenteditable", type: Boolean})
+    //contenteditable: Boolean = true;
     
     connectedCallback(): void {
         super.connectedCallback();
+        // It's important to bind the eventhandler to the window object, to avoid the need of focusing.
         window.addEventListener('contextmenu', (event) => { event.preventDefault(); });
-        // Note: We need to bind the keydown eventhandler to the window object, to avoid the need of focusing the editor component.
-        window.addEventListener('keydown', this._windowOnKeyDown.bind(this));
+        window.addEventListener('keydown', this._windowKeyDown.bind(this));
+        window.addEventListener('mousemove', this._windowMouseMove.bind(this));
     };
 
 
@@ -97,22 +100,14 @@ export class EditorComponent extends LitElement {
 
 
     public onmousemove: ((this: GlobalEventHandlers, ev: MouseEvent) => any) = (event: MouseEvent) => {
-        // Currently only needed to allow placing a new tessera at the cursor position.
-        this._mousePositionX = event.clientX;
-        this._mousePositionY = event.clientY;
-
         switch (event.buttons) {
-            case 0:
-                this._hoveredElement = this._getElementTreeBelowCursor(event.clientX, event.clientY);
-                break;
             case 1:
-                this._hoveredElement = this._getElementTreeBelowCursor(event.clientX, event.clientY);
                 switch (this._clickedElement.element!.tagName) {
                     case 'EDITOR-COMPONENT':
                         this._transformRelative(event.clientX  - this._previousMouseEvent!.clientX, event.clientY - this._previousMouseEvent!.clientY);
                         break;
-                    case 'TESSERA-CORE-COMPONENT':
-                        this._moveTesseraRelative(this._clickedElement.parentElement! as any, event.clientX  - this._previousMouseEvent!.clientX, event.clientY - this._previousMouseEvent!.clientY);
+                    case 'CDC-TESSERA':
+                        this._moveTesseraRelative(this._clickedElement.element! as any, event.clientX  - this._previousMouseEvent!.clientX, event.clientY - this._previousMouseEvent!.clientY);
                         break;
                     case 'TESSERA-OUTPUT-PORT-COMPONENT':
                         this._drawGhostConnection(this._clickedElement.element! as TesseraOutputPortComponent, event.clientX, event.clientY);
@@ -129,14 +124,15 @@ export class EditorComponent extends LitElement {
         switch (event.button) {
             case 0:
                 switch (this._clickedElement.element!.tagName) {
-                    case 'EDITOR-COMPONENT': break;
-                    case 'TESSERA-CORE-COMPONENT': break;
                     case 'TESSERA-OUTPUT-PORT-COMPONENT':
+                        this._hoveredElement = this._getElementTreeBelowCursor(this._mousePositionX, this._mousePositionY);
                         this._clearGhostConnection();
-
+                        
+                        // this._hoveredElement.element is the line element!
                         if (this._hoveredElement.element!.tagName === 'TESSERA-INPUT-PORT-COMPONENT') {
                             this._createConnection(this._clickedElement.element! as TesseraOutputPortComponent, this._hoveredElement.element! as TesseraInputPortComponent);
                         };
+
                         break;
                 };
 
@@ -147,7 +143,14 @@ export class EditorComponent extends LitElement {
     };
 
 
-    private _windowOnKeyDown: ((this: GlobalEventHandlers, ev: KeyboardEvent) => any) = (event: KeyboardEvent) => {
+    private _windowMouseMove: ((this: GlobalEventHandlers, ev: MouseEvent) => any) = (event: MouseEvent) => {
+        this._mousePositionX = event.clientX;
+        this._mousePositionY = event.clientY;
+    }
+
+
+    private _windowKeyDown: ((this: GlobalEventHandlers, ev: KeyboardEvent) => any) = (event: KeyboardEvent) => {
+        this._hoveredElement = this._getElementTreeBelowCursor(this._mousePositionX, this._mousePositionY);
         if (this._hoveredElement.element === null) return;
 
         switch (this._hoveredElement.element!.tagName) {
@@ -166,6 +169,7 @@ export class EditorComponent extends LitElement {
                         this._transformRelative(-25, 0);
                         break;
                     case 'Home':
+                    case ' ':
                         this._resetView();
                         break;
                     case 'a':
@@ -179,23 +183,14 @@ export class EditorComponent extends LitElement {
                     //    break;
                 };
                 break;
-            case 'TESSERA-CORE-COMPONENT':
+            case 'CDC-TESSERA':
                 switch (event.key) {
-                    case 'ArrowUp':
-                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, 0, -25);
-                        break;
-                    case 'ArrowDown':
-                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, 0, 25);
-                        break;
-                    case 'ArrowLeft':
-                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, -25, 0);
-                        break;
-                    case 'ArrowRight':
-                        this._moveTesseraRelative(this._hoveredElement.parentElement as any, 25, 0);
-                        break;
                     case 'd':
-                        this._deleteTessera(this._hoveredElement.parentElement as any);
+                        this._deleteTessera(this._hoveredElement.element as any);
                         break;
+                    default:
+                        (this._hoveredElement.element! as Tessera).codaicKeyDown(event);
+                    break;
                 };
                 break;
         };
@@ -255,15 +250,14 @@ export class EditorComponent extends LitElement {
     private _moveTesseraRelative(tessera: any, dX: number, dY: number) {
         // Move the tessera component.
         const foreignObject = tessera.parentElement;
-        console.log(foreignObject);
         const x = Number(foreignObject!.getAttribute('x'));
         const y = Number(foreignObject!.getAttribute('y'));
         foreignObject!.setAttribute('x', `${x + dX/this._zoom}`);
         foreignObject!.setAttribute('y', `${y + dY/this._zoom}`);
         // Move all connected lines.
         // OPTIMIZE: Do this just once during the mousedown event.
-        const connectedLineArray = [].filter.call(this.shadowRoot!.querySelectorAll('line'), (e: SVGLineElement) => e.id.includes(tessera.id)) as SVGLineElement[];
-        
+        const connectedLineArray = [].filter.call(this.shadowRoot!.querySelectorAll('line'), (e: SVGLineElement) => e.id.includes(tessera.tesseraId)) as SVGLineElement[];
+
         for (let i = 0; i < connectedLineArray.length; i++) {
             const line = connectedLineArray[i];
 
@@ -298,8 +292,6 @@ export class EditorComponent extends LitElement {
 
 
     private _createConnection(tesseraOutputPortComponent: TesseraOutputPortComponent, tesseraInputPortComponent: TesseraInputPortComponent) {
-        console.log('Create connection')
-        console.log(tesseraOutputPortComponent, tesseraInputPortComponent)
         // Don't connect if both ports are part of the same tessera.
         if (tesseraOutputPortComponent.id.split('.')[0] === tesseraInputPortComponent.id.split('.')[0]) {
             return;
@@ -340,12 +332,8 @@ export class EditorComponent extends LitElement {
 
     private _getElementTreeBelowCursor(x: number, y: number): { element: Element | null, parentElement: Element | null } {
         let myTree: Element[] = [];
-
-        if (this.shadowRoot!.elementsFromPoint(x, y).includes(this)) {
-            myTree.push(this);
-            myTree.push(...this._elementsFromPoint(x, y));
-        };
-
+        myTree.push(...this.shadowRoot!.elementsFromPoint(x, y).reverse());
+        myTree = myTree.filter((e) => e.tagName.endsWith('DIALOG') ||e.tagName === 'EDITOR-COMPONENT' || e.tagName === 'CDC-TESSERA' || e.tagName === 'TESSERA-INPUT-PORT-COMPONENT' || e.tagName === 'TESSERA-OUTPUT-PORT-COMPONENT');
         return { element: myTree.pop()?? null, parentElement: myTree.pop()?? null };
     };
 
@@ -402,7 +390,7 @@ export class EditorComponent extends LitElement {
         }).then((db) => {
             IndexedDBUtil.openObjectStore(db, 'editor', 'readwrite').then((objectStore) => {
                 IndexedDBUtil.putRecord(objectStore, 'test', projectObject).then(() => {
-                    console.log('Record put');
+                    console.log(projectObject);
                 });
             });
         });

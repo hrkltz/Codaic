@@ -117,12 +117,12 @@ class MainActivity : ComponentActivity() {
                                 if (projectInstance.isRunning) {
                                     projectInstance.stop()
                                 } else {
-                                    projectInstance.init("x1")
+                                    projectInstance.init("y3")
                                     projectInstance.start()
                                 }
                             }
                         }) {
-                            Text(text = "x1")
+                            Text(text = "y3")
                         }
                     }
                 }
