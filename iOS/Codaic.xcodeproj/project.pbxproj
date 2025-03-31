@@ -6,6 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A7C41EA92D9B33D800CDC5E4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		A7B9A7542D9B2EBA008B4374 /* Codaic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Codaic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -14,6 +27,11 @@
 		A7B9A7562D9B2EBA008B4374 /* Codaic */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Codaic;
+			sourceTree = "<group>";
+		};
+		A7C41EA22D9B32CA00CDC5E4 /* Support */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +50,7 @@
 		A7B9A74B2D9B2EBA008B4374 = {
 			isa = PBXGroup;
 			children = (
+				A7C41EA22D9B32CA00CDC5E4 /* Support */,
 				A7B9A7562D9B2EBA008B4374 /* Codaic */,
 				A7B9A7552D9B2EBA008B4374 /* Products */,
 			);
@@ -55,6 +74,8 @@
 				A7B9A7502D9B2EBA008B4374 /* Sources */,
 				A7B9A7512D9B2EBA008B4374 /* Frameworks */,
 				A7B9A7522D9B2EBA008B4374 /* Resources */,
+				A7C41EA92D9B33D800CDC5E4 /* Embed Frameworks */,
+				A7C41EAB2D9B344500CDC5E4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -62,6 +83,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A7B9A7562D9B2EBA008B4374 /* Codaic */,
+				A7C41EA22D9B32CA00CDC5E4 /* Support */,
 			);
 			name = Codaic;
 			packageProductDependencies = (
@@ -114,6 +136,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A7C41EAB2D9B344500CDC5E4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nset -e \n\nmkdir -p \"$CODESIGNING_FOLDER_PATH/python/lib\"\nif [ \"$EFFECTIVE_PLATFORM_NAME\" = \"-iphonesimulator\" ]; then\n    echo \"Installing Python modules for iOS Simulator\"\n    cp -r \"$PROJECT_DIR/Support/Python.xcframework/ios-arm64_x86_64-simulator/lib/\" \"$CODESIGNING_FOLDER_PATH/python/lib/\"\nelse\n    echo \"Installing Python modules for iOS Device\"\n    cp -r \"$PROJECT_DIR/Support/Python.xcframework/ios-arm64/lib/\" \"$CODESIGNING_FOLDER_PATH/python/lib/\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A7B9A7502D9B2EBA008B4374 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -162,7 +204,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -184,6 +226,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Codaic/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -225,7 +268,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -240,6 +283,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "Codaic/Bridging-Header.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -254,7 +298,12 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Codaic/Preview Content\"";
 				DEVELOPMENT_TEAM = J3W9W6MZK6;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/Python.framework/Headers";
+				INFOPLIST_KEY_CFBundleDisplayName = Codaic;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -283,7 +332,12 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Codaic/Preview Content\"";
 				DEVELOPMENT_TEAM = J3W9W6MZK6;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/Python.framework/Headers";
+				INFOPLIST_KEY_CFBundleDisplayName = Codaic;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
