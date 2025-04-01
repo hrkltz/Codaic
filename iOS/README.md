@@ -54,3 +54,5 @@ PyRun_SimpleString("""print(3*5)""")
 In case of rejection other solutions:
 - Let the phone connect as a client to a remote server which host the UI
 - Use TCP or Bluetooth as a connection
+
+Note: Codea Air Code (VS Code Extension) + Codea is technical doing exactly the same.
