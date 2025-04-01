@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A775AC8A2D9C8233005FB883 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = A775AC892D9C8233005FB883 /* Telegraph */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		A7C41EA92D9B33D800CDC5E4 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -41,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A775AC8A2D9C8233005FB883 /* Telegraph in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +92,7 @@
 			);
 			name = Codaic;
 			packageProductDependencies = (
+				A775AC892D9C8233005FB883 /* Telegraph */,
 			);
 			productName = Codaic;
 			productReference = A7B9A7542D9B2EBA008B4374 /* Codaic.app */;
@@ -116,6 +122,9 @@
 			);
 			mainGroup = A7B9A74B2D9B2EBA008B4374;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A775AC882D9C8233005FB883 /* XCRemoteSwiftPackageReference "Telegraph" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A7B9A7552D9B2EBA008B4374 /* Products */;
 			projectDirPath = "";
@@ -378,6 +387,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A775AC882D9C8233005FB883 /* XCRemoteSwiftPackageReference "Telegraph" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Building42/Telegraph.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.40.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A775AC892D9C8233005FB883 /* Telegraph */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A775AC882D9C8233005FB883 /* XCRemoteSwiftPackageReference "Telegraph" */;
+			productName = Telegraph;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A7B9A74C2D9B2EBA008B4374 /* Project object */;
 }
