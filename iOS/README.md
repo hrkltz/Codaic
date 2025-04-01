@@ -40,3 +40,17 @@ setenv("PYTHONPATH", [pythonPath, libDynloadPath].compactMap { $0 }.joined(separ
 Py_Initialize()
 PyRun_SimpleString("""print(3*5)""")
 ```
+
+## WebServer
+
+[readium/GCDWebServer](https://github.com/readium/GCDWebServer) | 10.12.2024 | 12
+[Telegraph](https://github.com/Building42/Telegraph) | 01.04.2024 | 820
+[yene/GCDWebServer](https://github.com/yene/GCDWebServer) | 26.12.2023 | 34
+[Embassy](https://github.com/envoy/Embassy) | 30.01.2023 | 604
+[swifter](https://github.com/httpswift/swifter) | 26.09.2020 | 3900
+[GCDWebServer](https://github.com/swisspol/GCDWebServer) | 15.03.2020 | 6500
+[Ambassador](https://github.com/envoy/Ambassador) | 11.10.2018 | 187
+
+In case of rejection other solutions:
+- Let the phone connect as a client to a remote server which host the UI
+- Use TCP or Bluetooth as a connection
