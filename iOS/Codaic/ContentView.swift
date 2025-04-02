@@ -9,9 +9,9 @@ import SwiftUI
 import Telegraph
 
 struct ContentView: View {
-    
-    var server: Server?
+    @StateObject private var serverViewModel = ServerViewModel()
 
+    
     init() {
         guard let pythonPath = Bundle.main.path(forResource: "python/lib/python3.13", ofType: nil) else { return }
         guard let libDynloadPath = Bundle.main.path(forResource: "python/lib/python3.13/lib-dynload", ofType: nil) else { return }
@@ -22,30 +22,19 @@ struct ContentView: View {
         print(\"3 * 5 =\", 3*5)
         print(\"Hello World!\")
         """)
-        
-        // Launch the HTTP server on Port 8080.
-        server = Server()
-        
-        // Respond to all GET requests
-        server?.route(.GET, "/") { request in
-            return HTTPResponse(content: "Hello from Telegraph on iOS!")
-        }
-        
-        do {
-            try server?.start(port: 8080)
-            print("Server started at http://localhost:8080")
-        } catch {
-            print("Failed to start server: \(error)")
-        }
     }
     
     
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text(getWiFiIPAddress() ?? "Unknown")
+            Toggle(isOn: $serverViewModel.isServerOn) {
+                Text("Start Web Server")
+                    .font(.headline)
+            }
         }
         .padding()
     }
