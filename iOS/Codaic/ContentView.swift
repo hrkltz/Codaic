@@ -7,21 +7,49 @@
 
 import SwiftUI
 import Telegraph
+import os
 
 struct ContentView: View {
     @StateObject private var serverViewModel = ServerViewModel()
 
     
     init() {
+        // Initialize Python.
         guard let pythonPath = Bundle.main.path(forResource: "python/lib/python3.13", ofType: nil) else { return }
         guard let libDynloadPath = Bundle.main.path(forResource: "python/lib/python3.13/lib-dynload", ofType: nil) else { return }
         setenv("PYTHONPATH", [pythonPath, libDynloadPath].compactMap { $0 }.joined(separator: ":"), 1)
         
         Py_Initialize()
-        PyRun_SimpleString("""
+        
+        // Just for testing.
+        let code = """
         print(\"3 * 5 =\", 3*5)
         print(\"Hello World!\")
-        """)
+        """
+        
+        let project1 = ProjectModel(input: "", code: code, output: "")
+        
+        guard let project1Json = JsonUtil.encode(project1) else {
+            LoggerUtil.logError("JsonUtil.encode(..) failed.")
+            return
+        }
+        
+        guard FileUtil.save(fileName: "project.json", content: project1Json) else {
+            LoggerUtil.logError("FileUtil.save(..) failed.")
+            return
+        }
+        
+        guard let project2Json = FileUtil.load(fileName: "project.json") else {
+            LoggerUtil.logError("FileUtil.load(..) failed.")
+            return
+        }
+        
+        guard let project2: ProjectModel = JsonUtil.decode(project2Json) else {
+            LoggerUtil.logError("JsonUtil.decode(..) failed.")
+            return
+        }
+        
+        PyRun_SimpleString(project2.code)
     }
     
     

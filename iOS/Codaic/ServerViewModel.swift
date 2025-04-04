@@ -20,28 +20,27 @@ class ServerViewModel: ObservableObject {
             }
         }
     }
-    private var server: Server?
+    private var server: Server = Server()
 
     
     private func startServer() {
         server = Server()
         
         // Respond to all GET requests
-        server?.route(.GET, "/") { request in
-            return HTTPResponse(content: "Hello from Telegraph on iOS!")
+        server.route(.GET, "/") { request in
+            return HTTPResponse(content: "Codaic server is running!")
         }
         
-        do {
-            try server?.start(port: 8080)
-            print("Server started at http://localhost:8080")
-        } catch {
-            print("Failed to start server: \(error)")
+        ProjectEndpoint.registerRoutes(server)
+        
+        guard (try? server.start(port: 8080)) != nil else {
+            LoggerUtil.logError("server.start(..) failed.")
+            return
         }
     }
 
     
     private func stopServer() {
-        server?.stop()
-        print("🛑 Server stopped")
+        server.stop()
     }
 }
