@@ -59,7 +59,7 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text(getWiFiIPAddress() ?? "Unknown")
-            Toggle(isOn: $serverViewModel.isServerOn) {
+            Toggle(isOn: $serverViewModel.isOn) {
                 Text("Start Web Server")
                     .font(.headline)
             }
