@@ -17,7 +17,7 @@ struct ProjectEndpoint {
     
     /// curl -X POST http://<IP>:8080/project -H "Content-Type: text/plain" --data-binary "@project.json"
     static public func handlePost(request: HTTPRequest) -> HTTPResponse {
-        LoggerUtil.logError("[API][/project][POST]")
+        LoggerUtil.logInfo("[API][/project][POST]")
         // 1. Check if the body is not empty.
         let bodyString = String(data: request.body, encoding: .utf8) ?? ""
         
@@ -50,7 +50,7 @@ struct ProjectEndpoint {
     
     /// curl -X GET http://<IP>:8080/project
     static public func handleGet(request: HTTPRequest) -> HTTPResponse {
-        LoggerUtil.logError("[API][/project][GET]")
+        LoggerUtil.logInfo("[API][/project][GET]")
         // 1. Load the project from the storage.
         guard let projectJson = FileUtil.load(fileName: "project.json") else {
             LoggerUtil.logError("FileUtil.load(..) failed.")

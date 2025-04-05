@@ -20,5 +20,7 @@ struct LoggerUtil {
     }
     
     
-    // Instance
+    static public func logInfo(_ message: String) {
+        logger.info("\(message, privacy: .public)")
+    }
 }
