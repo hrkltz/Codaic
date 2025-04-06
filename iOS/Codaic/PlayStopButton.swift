@@ -30,6 +30,7 @@ struct PlayStopButton: View {
             .background(isPlaying ? Color.red : Color.green)
             .cornerRadius(10)
         }
+        .buttonStyle(PlainButtonStyle())
     }
 
     
@@ -42,4 +43,8 @@ struct PlayStopButton: View {
     func stopAction() {
         codaicRuntime.stop()
     }
+}
+
+#Preview {
+    PlayStopButton()
 }

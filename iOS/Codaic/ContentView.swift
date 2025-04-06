@@ -12,55 +12,53 @@ import os
 struct ContentView: View {
     @StateObject private var serverViewModel = ServerViewModel()
 
+    @AppStorage("username") private var username: String = ""
+    @State private var tempUsername: String = ""
+    @State private var ipAddress: String
     
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text(getWiFiIPAddress() ?? "Unknown")
-            Toggle(isOn: $serverViewModel.isOn) {
-                Text("Start Web Server")
-                    .font(.headline)
-            }
-            PlayStopButton()
-        }
-        .padding()
+    
+    
+    
+    init() {
+        self.ipAddress = iOSUtil.getWifiIpAddress() ?? "Unknown"
     }
     
     
-    func getWiFiIPAddress() -> String? {
-        var address: String?
-
-        var ifaddr: UnsafeMutablePointer<ifaddrs>? = nil
-        if getifaddrs(&ifaddr) == 0 {
-            var ptr = ifaddr
-            while ptr != nil {
-                guard let interface = ptr?.pointee else { break }
-
-                let addrFamily = interface.ifa_addr.pointee.sa_family
-                if addrFamily == UInt8(AF_INET) { // IPv4 only
-                    let name = String(cString: interface.ifa_name)
-                    if name == "en0" { // Wi-Fi
-                        var addr = interface.ifa_addr.pointee
-                        var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                        getnameinfo(&addr,
-                                    socklen_t(interface.ifa_addr.pointee.sa_len),
-                                    &hostname,
-                                    socklen_t(hostname.count),
-                                    nil,
-                                    socklen_t(0),
-                                    NI_NUMERICHOST)
-                        address = String(cString: hostname)
-                        break
+    var body: some View {
+        NavigationStack {
+            VStack() {
+                Form {
+                    Section() {
+                        LabelValueActionView(label: "WLAN-IP", value: self.ipAddress, actionIconLabel: "arrow.clockwise") {
+                            self.ipAddress = iOSUtil.getWifiIpAddress() ?? "Unbekannt"
+                        }
+                    }
+                    
+                    Section("Anleitung") {
+                        HStack(alignment: .top) {
+                            Text("1.")
+                            Text("Verbinde dein iPhone mit dem selben WLAN wie dein Desktop oder Laptop.")
+                        }
+                        HStack(alignment: .top) {
+                            Text("2.")
+                            Text("Falls im Feld \"WLAN-IP\" noch \"Unbekannt\" angezeigt wird, drücke den aktualisierung Button.")
+                        }
+                        HStack(alignment: .top) {
+                            Text("3.")
+                            Text("Um die Codaic IDE zu öffnen, gebe die oben angezeigte \"WLAN-IP\" in deinen Browser auf deinem Desktop oder Laptop ein.")
+                        }
                     }
                 }
-                ptr = ptr?.pointee.ifa_next
+                PlayStopButton()
+                Spacer()
+                // Footer
+                Text("App-Version \(iOSUtil.getAppVersion() ?? "?.?") – Build \(iOSUtil.getBuildNumber() ?? "?")")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
             }
-            freeifaddrs(ifaddr)
+            .background(Color(UIColor.systemGroupedBackground))
+            .navigationTitle("Codaic")
         }
-
-        return address
     }
 }
 
