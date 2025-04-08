@@ -14,6 +14,7 @@ class CodaicServer {
     private static let setup: Void = {
         // Register /project endpoints.
         ProjectEndpoint.registerRoutes(CodaicServer.server)
+        TestEndpoint.registerRoutes(CodaicServer.server)
     }()
     
     
@@ -48,7 +49,7 @@ class CodaicServer {
     }
     
     
-    init () {
+    /*init () {
         LoggerUtil.logError("When is init() called???")
         // Respond to all other GET requests.
         CodaicServer.server.route(.GET, "/") { request in
@@ -58,5 +59,5 @@ class CodaicServer {
             
         // Register /project endpoints.
         ProjectEndpoint.registerRoutes(CodaicServer.server)
-    }
+    }*/
 }

@@ -10,17 +10,12 @@ import Telegraph
 import os
 
 struct ContentView: View {
-    @StateObject private var serverViewModel = ServerViewModel()
-
-    @AppStorage("username") private var username: String = ""
-    @State private var tempUsername: String = ""
     @State private var ipAddress: String
-    
-    
     
     
     init() {
         self.ipAddress = iOSUtil.getWifiIpAddress() ?? "Unknown"
+        CodaicServer.start()
     }
     
     
@@ -29,7 +24,7 @@ struct ContentView: View {
             VStack() {
                 Form {
                     Section() {
-                        LabelValueActionView(label: "WLAN-IP", value: self.ipAddress, actionIconLabel: "arrow.clockwise") {
+                        LabelValueActionComponent(label: "WLAN-IP", value: self.ipAddress, actionIconLabel: "arrow.clockwise") {
                             self.ipAddress = iOSUtil.getWifiIpAddress() ?? "Unbekannt"
                         }
                     }
@@ -47,9 +42,13 @@ struct ContentView: View {
                             Text("3.")
                             Text("Um die Codaic IDE zu öffnen, gebe die oben angezeigte \"WLAN-IP\" in deinen Browser auf deinem Desktop oder Laptop ein.")
                         }
+                        HStack(alignment: .top) {
+                            Text("4.")
+                            Text("Drücke auf den grünen Start-Button um dein Project auszuführen.")
+                        }
                     }
                 }
-                PlayStopButton()
+                RunButtonComponent(destination: ExecutionView())
                 Spacer()
                 // Footer
                 Text("App-Version \(iOSUtil.getAppVersion() ?? "?.?") – Build \(iOSUtil.getBuildNumber() ?? "?")")

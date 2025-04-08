@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LabelValueActionView: View {
+struct LabelValueActionComponent: View {
     var label: String
     var value: String
     var actionIconLabel: String
@@ -32,7 +32,7 @@ struct LabelValueActionView: View {
 }
 
 #Preview {
-    LabelValueActionView(label: "WLAN-IP", value: "192.168.1.100", actionIconLabel: "arrow.clockwise") {
+    LabelValueActionComponent(label: "WLAN-IP", value: "192.168.1.100", actionIconLabel: "arrow.clockwise") {
         print("onAction")
     }
 }
