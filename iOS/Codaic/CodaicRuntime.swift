@@ -9,9 +9,16 @@ import Foundation
 
 class CodaicRuntime {
     init() {
-        // Initialize Python.
-        guard let pythonPath = Bundle.main.path(forResource: "python/lib/python3.13", ofType: nil) else { return }
-        guard let libDynloadPath = Bundle.main.path(forResource: "python/lib/python3.13/lib-dynload", ofType: nil) else { return }
+        guard let pythonPath = Bundle.main.path(forResource: "python/lib/python3.13", ofType: nil) else {
+            LoggerUtil.logError("python/lib/python3.13 missing.")
+            return
+        }
+        
+        guard let libDynloadPath = Bundle.main.path(forResource: "python/lib/python3.13/lib-dynload", ofType: nil) else {
+            LoggerUtil.logError("python/lib/python3.13/lib-dynload missing.")
+            return
+        }
+        
         setenv("PYTHONPATH", [pythonPath, libDynloadPath].compactMap { $0 }.joined(separator: ":"), 1)
     }
     
@@ -36,6 +43,8 @@ class CodaicRuntime {
         let builtins = PyEval_GetBuiltins()
         PyDict_SetItemString(globals, "__builtins__", builtins)
         
+        LogManager.shared.addLog("Start")
+        
         // Note:
         // 1. Arg is the script
         // 2. Arg Py_eval_input   == A single expression (like 2 + 2, x * 5). It returns a value.
@@ -43,7 +52,6 @@ class CodaicRuntime {
         //        Py_file_input   == A full Python script (multiple lines, functions, etc.). Use this for scripts.
         // 3. Arg globals == The Python global symbol table (variables, functions, etc.).
         // 4. Arg locals == The local symbol table (used inside functions, etc.).
-        LoggerUtil.logInfo("Run: \(project.code)")
         let run_result = PyRun_String(project.code, Py_file_input, globals, locals)
         
         if (run_result != nil) {

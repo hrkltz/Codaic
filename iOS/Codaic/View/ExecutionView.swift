@@ -15,10 +15,8 @@ struct ExecutionView: View {
         LogComponent(logEntryArray: logManager.logEntryArray)
         .onAppear {
             codaicRuntime.start()
-            logManager.addLog("Start")
         }
         .onDisappear {
-            logManager.addLog("Stop")
             codaicRuntime.stop()
         }
     }

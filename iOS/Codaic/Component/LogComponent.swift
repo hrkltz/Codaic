@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: Each Run could keep the Log in an own settings like card with the timestamp as header
 struct LogComponent: View {
     let logEntryArray: [LogEntryModel]
 
@@ -53,6 +54,6 @@ struct LogComponent: View {
     LogComponent(logEntryArray: [
         LogEntryModel(timestamp: "12:34.567", message: "A log entry."),
         LogEntryModel(timestamp: "12:35.678", message: "A second log entry."),
-        LogEntryModel(timestamp: "12:36.789", message: "A third log entry."),
+        LogEntryModel(timestamp: "12:32.789", message: "A third log entry."),
     ])
 }
