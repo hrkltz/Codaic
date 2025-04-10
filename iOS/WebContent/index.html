@@ -5,15 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codaic IDE</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Willkommen in der Codaic IDE</h1>
+        <h1>Codaic IDE</h1>
+        <button id="save">Save</button>
     </header>
     <main>
-        <section id="content">
-            <p>Diese Seite befindet sich im Aufbau.</p>
-        </section>
+        <select id="input-select" name="input-select">
+            <option value="0" selected>Beschleunigungssensor</option>
+            <option value="1">Rotationssensor</option>
+            <option value="1">Magnetometer</option>
+        </select>
+        <textarea id="code-input"></textarea>
     </main>
     <footer>
         <p>&copy; 2025 hrkltz</p>
