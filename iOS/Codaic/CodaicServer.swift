@@ -12,7 +12,8 @@ class CodaicServer {
     static private let port: Int = 8080
     static private(set) var isRunning: Bool = false
     private static let setup: Void = {
-        // Register /project endpoints.
+        // Register all endpoints.
+        RootEndpoint.registerRoutes(CodaicServer.server)
         ProjectEndpoint.registerRoutes(CodaicServer.server)
         TestEndpoint.registerRoutes(CodaicServer.server)
     }()
@@ -47,17 +48,4 @@ class CodaicServer {
         
         isRunning = false
     }
-    
-    
-    /*init () {
-        LoggerUtil.logError("When is init() called???")
-        // Respond to all other GET requests.
-        CodaicServer.server.route(.GET, "/") { request in
-            LoggerUtil.logError("[API][/]")
-            return HTTPResponse(content: "Codaic server is running!")
-        }
-            
-        // Register /project endpoints.
-        ProjectEndpoint.registerRoutes(CodaicServer.server)
-    }*/
 }

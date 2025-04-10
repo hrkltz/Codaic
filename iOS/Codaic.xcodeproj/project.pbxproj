@@ -28,6 +28,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		A79E5D1E2DA8565400EC690A /* WebContent */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WebContent;
+			sourceTree = "<group>";
+		};
 		A7B9A7562D9B2EBA008B4374 /* Codaic */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Codaic;
@@ -55,6 +60,7 @@
 		A7B9A74B2D9B2EBA008B4374 = {
 			isa = PBXGroup;
 			children = (
+				A79E5D1E2DA8565400EC690A /* WebContent */,
 				A7C41EA22D9B32CA00CDC5E4 /* Support */,
 				A7B9A7562D9B2EBA008B4374 /* Codaic */,
 				A7B9A7552D9B2EBA008B4374 /* Products */,
@@ -87,6 +93,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				A79E5D1E2DA8565400EC690A /* WebContent */,
 				A7B9A7562D9B2EBA008B4374 /* Codaic */,
 				A7C41EA22D9B32CA00CDC5E4 /* Support */,
 			);
