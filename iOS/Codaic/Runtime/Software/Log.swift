@@ -6,7 +6,18 @@
 //
 
 class Log {
+    private struct Input: Codable {
+        public let message: String
+    }
+    
+    
     static public func input(_ inputJson: String) {
-        LogRuntime.shared.addMessage(inputJson)
+        guard let input: Input = JsonUtil.decode(inputJson) else {
+            LoggerUtil.logError("JsonUtil.decode(..) failed.")
+            return
+        }
+        
+        LogRuntime.shared.addMessage(input.message)
     }
 }
+

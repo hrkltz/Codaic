@@ -8,6 +8,11 @@
 import AVFoundation
 
 class Torch {
+    private struct Input: Codable {
+        public let level: Float
+    }
+    
+    
     static private func on(level: Float) {
         guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else {
             LoggerUtil.logError("Torch unavailable.")
@@ -55,13 +60,13 @@ class Torch {
     
     
     static public func input(_ inputJson: String) {
-        guard let level = Float(inputJson) else {
-            LoggerUtil.logError("level not a float. (\(inputJson))")
+        guard let input: Input = JsonUtil.decode(inputJson) else {
+            LoggerUtil.logError("JsonUtil.decode(..) failed.")
             return
         }
         
-        if (level > 0.0) {
-            on(level: level)
+        if (input.level > 0.0) {
+            on(level: input.level)
         } else {
             off()
         }

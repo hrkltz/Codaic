@@ -15,8 +15,12 @@ struct JsonUtil {
             return nil
         }
         
-        guard let result = try? JSONDecoder().decode(T.self, from: data) else {
-            LoggerUtil.logError("JSONDecoder().decode(..) failed.")
+        let result: T
+        
+        do {
+            result = try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            LoggerUtil.logError("JSONDecoder().decode(..) failed. (\(error.localizedDescription))")
             return nil
         }
         
@@ -26,8 +30,12 @@ struct JsonUtil {
 
     /// Encode an Encodable object into a JSON string
     static public func encode<T: Encodable>(_ object: T) -> String? {
-        guard let resultJson = try? JSONEncoder().encode(object) else {
-            LoggerUtil.logError("JSONEncoder().encode(..) failed.")
+        let resultJson: Data
+        
+        do {
+            resultJson = try JSONEncoder().encode(object)
+        } catch {
+            LoggerUtil.logError("JSONEncoder().encode(..) failed. (\(error.localizedDescription))")
             return nil
         }
         

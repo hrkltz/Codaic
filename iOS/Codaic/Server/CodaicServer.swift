@@ -9,7 +9,7 @@ import Telegraph
 
 class CodaicServer {
     static private let server: Server = Server()
-    static private let port: Int = 8080
+    static private let port: Int = 8081
     static private(set) var isRunning: Bool = false
     private static let setup: Void = {
         // Register all endpoints.
@@ -29,8 +29,10 @@ class CodaicServer {
             return
         }
         
-        guard ((try? server.start(port: port)) != nil) else {
-            LoggerUtil.logError("server.start(..) failed.")
+        do {
+            try server.start(port: port)
+        } catch {
+            LoggerUtil.logError("server.start(..) failed. (\(error.localizedDescription))")
             return
         }
         
