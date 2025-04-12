@@ -27,6 +27,19 @@
 		A7B9A7542D9B2EBA008B4374 /* Codaic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Codaic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		A7CED42C2DAAFD0A005DB43E /* Exceptions for "Support" folder in "Embed Frameworks" phase from "Codaic" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			attributesByRelativePath = {
+				Python.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+			};
+			buildPhase = A7C41EA92D9B33D800CDC5E4 /* Embed Frameworks */;
+			membershipExceptions = (
+				Python.xcframework,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A79E5D1E2DA8565400EC690A /* WebContent */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -40,6 +53,9 @@
 		};
 		A7C41EA22D9B32CA00CDC5E4 /* Support */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A7CED42C2DAAFD0A005DB43E /* Exceptions for "Support" folder in "Embed Frameworks" phase from "Codaic" target */,
+			);
 			path = Support;
 			sourceTree = "<group>";
 		};
