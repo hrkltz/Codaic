@@ -61,7 +61,21 @@ class CodaicRuntime {
             if (result != nil) {
                 let resultStr = PyObject_Str(result);
                 let resultCStr = PyUnicode_AsUTF8(resultStr);
-                LogManager.shared.addLog(String(cString: resultCStr!))
+                let resultString = String(cString: resultCStr!)
+                // TODO: All returns should be JSON objects
+                //       Log: { "Message": "..." }
+                //       Torch: { "Level": 0.0 .. 1.0 }
+                
+                switch project.output {
+                case "Log":
+                    Log.input(resultString)
+                    break
+                case "Torch":
+                    Torch.input(resultString)
+                    break
+                default:
+                    LoggerUtil.logError("Unexcpected output. (\(project.output))")
+                }
                 
                 // Clean-up
                 Py_DECREF(resultStr);

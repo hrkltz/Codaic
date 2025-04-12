@@ -20,7 +20,7 @@ struct TestEndpoint {
     /// curl -X GET http://<IP>:8080/test/a
     static public func handleAGet(request: HTTPRequest) -> HTTPResponse {
         LoggerUtil.logInfo("[API][/test/a][GET]")
-        let project: ProjectModel = ProjectModel(input: "", code: "print(\"Hello A!\")")
+        let project: ProjectModel = ProjectModel(input: "", code: "print(\"Hello A!\")", output: "Log")
         let projectJson: String = JsonUtil.encode(project)!
         _ = FileUtil.save(fileName: "project.json", content: projectJson)
         return HTTPResponse(.ok, content: projectJson)
@@ -30,7 +30,7 @@ struct TestEndpoint {
     /// curl -X GET http://<IP>:8080/test/b
     static public func handleBGet(request: HTTPRequest) -> HTTPResponse {
         LoggerUtil.logInfo("[API][/test/b][GET]")
-        let project: ProjectModel = ProjectModel(input: "", code: "print(\"Hello B!\")")
+        let project: ProjectModel = ProjectModel(input: "", code: "print(\"Hello B!\")", output: "Log")
         let projectJson: String = JsonUtil.encode(project)!
         _ = FileUtil.save(fileName: "project.json", content: projectJson)
         return HTTPResponse(.ok, content: projectJson)
@@ -44,7 +44,7 @@ struct TestEndpoint {
         x = 5
         y = 3
         result = x + y
-        """)
+        """, output: "Log")
         let projectJson: String = JsonUtil.encode(project)!
         _ = FileUtil.save(fileName: "project.json", content: projectJson)
         return HTTPResponse(.ok, content: projectJson)
