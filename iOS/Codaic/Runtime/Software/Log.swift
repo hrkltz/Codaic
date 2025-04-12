@@ -7,6 +7,6 @@
 
 class Log {
     static public func input(_ inputJson: String) {
-        RuntimeLog.shared.addMessage(inputJson)
+        LogRuntime.shared.addMessage(inputJson)
     }
 }

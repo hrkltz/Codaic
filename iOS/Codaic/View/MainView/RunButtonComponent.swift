@@ -1,5 +1,5 @@
 //
-//  PlayStopButton.swift
+//  RunButtonComponent.swift
 //  Codaic
 //
 //  Created by Oliver Herklotz on 05.04.2025.
@@ -28,5 +28,5 @@ struct RunButtonComponent<Destination: View>: View {
 }
 
 #Preview {
-    RunButtonComponent(destination: ExecutionView())
+    RunButtonComponent(destination: RuntimeView())
 }

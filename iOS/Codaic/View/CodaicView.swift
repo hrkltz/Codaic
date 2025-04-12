@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  CodaicView.swift
 //  Codaic
 //
 //  Created by Oliver Herklotz on 31.03.2025.
@@ -9,7 +9,7 @@ import SwiftUI
 import Telegraph
 import os
 
-struct ContentView: View {
+struct CodaicView: View {
     @State private var ipAddress: String
     
     
@@ -48,7 +48,7 @@ struct ContentView: View {
                         }
                     }
                 }
-                RunButtonComponent(destination: ExecutionView())
+                RunButtonComponent(destination: RuntimeView())
                 Spacer()
                 // Footer
                 Text("App-Version \(iOSUtil.getAppVersion() ?? "?.?") – Build \(iOSUtil.getBuildNumber() ?? "?")")
@@ -62,5 +62,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    CodaicView()
 }

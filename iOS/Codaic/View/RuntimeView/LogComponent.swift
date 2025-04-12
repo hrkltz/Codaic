@@ -1,5 +1,5 @@
 //
-//  LogView.swift
+//  LogComponent.swift
 //  Codaic
 //
 //  Created by Oliver Herklotz on 08.04.2025.
@@ -9,7 +9,7 @@ import SwiftUI
 
 // TODO: Each Run could keep the Log in an own settings like card with the timestamp as header
 struct LogComponent: View {
-    let logEntryArray: [RuntimeLogEntryModel]
+    let logEntryArray: [LogRuntimeEntryModel]
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -52,8 +52,8 @@ struct LogComponent: View {
 
 #Preview {
     LogComponent(logEntryArray: [
-        RuntimeLogEntryModel(timestamp: "12:34.567", message: "A log entry."),
-        RuntimeLogEntryModel(timestamp: "12:35.678", message: "A second log entry."),
-        RuntimeLogEntryModel(timestamp: "12:32.789", message: "A third log entry."),
+        LogRuntimeEntryModel(timestamp: "12:34.567", message: "A log entry."),
+        LogRuntimeEntryModel(timestamp: "12:35.678", message: "A second log entry."),
+        LogRuntimeEntryModel(timestamp: "12:32.789", message: "A third log entry."),
     ])
 }

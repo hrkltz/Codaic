@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct ExecutionView: View {
+struct RuntimeView: View {
     @State private var codaicRuntime: CodaicRuntime = CodaicRuntime()
-    @ObservedObject private var logManager = RuntimeLog.shared
+    @ObservedObject private var logManager = LogRuntime.shared
     
     var body: some View {
         LogComponent(logEntryArray: logManager.logEntryArray)
@@ -24,5 +24,5 @@ struct ExecutionView: View {
 }
 
 #Preview {
-    ExecutionView()
+    RuntimeView()
 }

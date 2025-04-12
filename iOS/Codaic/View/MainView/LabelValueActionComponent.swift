@@ -1,6 +1,6 @@
 
 //
-//  ContactCard.swift
+//  LabelValueActionComponent.swift
 //  Codaic
 //
 //  Created by Oliver Herklotz on 06.04.2025.
