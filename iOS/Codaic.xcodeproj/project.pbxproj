@@ -103,6 +103,7 @@
 				A7B9A7522D9B2EBA008B4374 /* Resources */,
 				A7C41EA92D9B33D800CDC5E4 /* Embed Frameworks */,
 				A7C41EAB2D9B344500CDC5E4 /* ShellScript */,
+				A7CED42D2DAB00C7005DB43E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -185,6 +186,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nset -e \n\nmkdir -p \"$CODESIGNING_FOLDER_PATH/python/lib\"\nif [ \"$EFFECTIVE_PLATFORM_NAME\" = \"-iphonesimulator\" ]; then\n    echo \"Installing Python modules for iOS Simulator\"\n    cp -r \"$PROJECT_DIR/Support/Python.xcframework/ios-arm64_x86_64-simulator/lib/\" \"$CODESIGNING_FOLDER_PATH/python/lib/\"\nelse\n    echo \"Installing Python modules for iOS Device\"\n    cp -r \"$PROJECT_DIR/Support/Python.xcframework/ios-arm64/lib/\" \"$CODESIGNING_FOLDER_PATH/python/lib/\"\nfi\n";
+		};
+		A7CED42D2DAB00C7005DB43E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Sign all .so files in the app bundle\nAPP_BUNDLE_PATH=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}\"\n\nfind \"$APP_BUNDLE_PATH/python\" -name \"*.so\" -exec codesign --force --sign \"$CODE_SIGN_IDENTITY\" {} \\;\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
