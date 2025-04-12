@@ -54,9 +54,9 @@ class Torch {
     }
     
     
-    static public func input(_ level: String) {
-        guard let level = Float(level) else {
-            LoggerUtil.logError("level not a float. (\(level))")
+    static public func input(_ inputJson: String) {
+        guard let level = Float(inputJson) else {
+            LoggerUtil.logError("level not a float. (\(inputJson))")
             return
         }
         

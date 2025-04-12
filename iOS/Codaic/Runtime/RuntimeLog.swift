@@ -1,5 +1,5 @@
 //
-//  LogManager.swift
+//  RuntimeLog.swift
 //  Codaic
 //
 //  Created by Oliver Herklotz on 08.04.2025.
@@ -8,9 +8,9 @@
 import SwiftUI
 import Combine
 
-final class LogManager: ObservableObject {
-    static let shared = LogManager()
-    @Published private(set) var logEntryArray: [LogEntryModel] = []
+final class RuntimeLog: ObservableObject {
+    static let shared = RuntimeLog()
+    @Published private(set) var logEntryArray: [RuntimeLogEntryModel] = []
     private let queue = DispatchQueue(label: "log.queue", attributes: .concurrent)
 
     
@@ -19,11 +19,11 @@ final class LogManager: ObservableObject {
     }
 
     
-    func addLog(_ message: String) {
+    func addMessage(_ message: String) {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss.SSS"
         let timestamp = formatter.string(from: Date())
-        let logEntry: LogEntryModel = LogEntryModel(timestamp: timestamp, message: message)
+        let logEntry: RuntimeLogEntryModel = RuntimeLogEntryModel(timestamp: timestamp, message: message)
 
         queue.async(flags: .barrier) {
             DispatchQueue.main.async {

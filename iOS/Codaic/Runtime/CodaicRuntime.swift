@@ -43,7 +43,7 @@ class CodaicRuntime {
         let builtins = PyEval_GetBuiltins()
         PyDict_SetItemString(globals, "__builtins__", builtins)
         
-        LogManager.shared.addLog("Start")
+        RuntimeLog.shared.addMessage("Start")
         
         // Note:
         // 1. Arg is the script

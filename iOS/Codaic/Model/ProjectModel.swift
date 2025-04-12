@@ -1,5 +1,5 @@
 //
-//  Model.swift
+//  ProjectModel.swift
 //  Codaic
 //
 //  Created by Oliver Herklotz on 04.04.2025.
