@@ -11,7 +11,6 @@
 #define Bridging_Header_h
 
 #include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
+#include "codaic.h"
 
 #endif

@@ -27,6 +27,12 @@ struct CodaicView: View {
                         LabelValueActionComponent(label: "WLAN-IP", value: self.ipAddress, actionIconLabel: "arrow.clockwise") {
                             self.ipAddress = iOSUtil.getWifiIpAddress() ?? "Unbekannt"
                         }
+                        Button("Run Lua") {
+                            LuaUtil.run(code: "print('Hello from Lua – ' .. 2+3)")
+                            // OR
+                            // LuaRunner.run(file: "myscript")
+                        }
+                        .padding()
                     }
                     
                     Section("Anleitung") {

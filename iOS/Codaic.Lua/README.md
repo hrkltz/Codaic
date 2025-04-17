@@ -13,20 +13,65 @@
   1. `{LUA_LOADLIBNAME, luaopen_package},`
   2. `{LUA_IOLIBNAME, luaopen_io},`
   3. `{LUA_OSLIBNAME, luaopen_os},`
-4. Put the following content into Bridging-Header.h
+5. Put the following content into Bridging-Header.h
 ```h
 #ifndef Bridging_Header_h
 #define Bridging_Header_h
 
 #include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
+#include "codaic.h"
 
 #endif
 ```
-5. Lua is using Macros as stack‑shuffling helpers (`lua_pop(L,n)`, `lua_insert(L,idx)` & `lua_remove(L,idx)`) which can't be called from Swift
-  1. Comment them out (`lua.h`)
-  2. Implement them in c functions 
+6. Define a class which utilze Lua to allow access from Swift
+  1. `codaic.h`
+```h
+#ifndef codaic_h
+#define codaic_h
+
+/// Run a Lua string. Returns 0 on success, non‑zero on Lua error.
+int run_lua_string(const char *utf8Script);
+
+/// Run a .lua file sitting at `fullPath`. Same return‑code contract.
+int run_lua_file  (const char *fullPath);
+
+#endif
+```
+  2. `codaic.c`
+```c
+
+#include "codaic.h"
+#include "lauxlib.h"
+#include "lualib.h"
+
+/// lua_newstate / lua_close instead.
+static lua_State *L = NULL;
+
+
+static void ensure_state(void) {
+    if (!L) {
+        // Initiate a new state.
+        L = luaL_newstate();
+        
+        // Load math, string, table, …
+        luaL_openlibs(L);
+    }
+}
+
+
+int run_lua_string(const char *code) {
+    ensure_state();
+    
+    return luaL_dostring(L, code);
+}
+
+
+int run_lua_file(const char *path) {
+    ensure_state();
+    
+    return luaL_dofile(L, path);
+}
+```
 
 ## WebServer
 
