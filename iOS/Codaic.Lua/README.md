@@ -1,57 +1,30 @@
-# Codaic / iOS / Codaic.Python
+# Codaic / iOS / Codaic.Lua
 
-## Add Python To iOS App
+## Add Lua To iOS App
 
-Source 1: https://github.com/beeware/Python-Apple-support/blob/main/USAGE.md
-Source 2: https://docs.python.org/3/using/ios.html#adding-python-to-an-ios-project
+1. Download the source ([Lua 5.4.7](https://www.lua.org/ftp/lua-5.4.7.tar.gz))
+2. Extract the src folder into Support/Lua-5.4.7
+3. Remove the following files as we want to limit the access a bit:
+  1. loslib.c (OS functions)
+  2. loadlib.c (package)
+  3. liolib.c (IO functions)
+  4. luac.c & lua.c (Interpreter)
+4. Remove the corresponding links from `linit.c`
+  1. `{LUA_LOADLIBNAME, luaopen_package},`
+  2. `{LUA_IOLIBNAME, luaopen_io},`
+  3. `{LUA_OSLIBNAME, luaopen_os},`
+4. Put the following content into Bridging-Header.h
+```h
+#ifndef Bridging_Header_h
+#define Bridging_Header_h
 
-1. Download [Python-3.13-iOS-support.b6.tar.gz](https://github.com/beeware/Python-Apple-support/releases/download/3.13-b6/Python-3.13-iOS-support.b6.tar.gz)
-2. Put it inside the Support folder
-3. Targets -> Codaic -> General
-    1. Python.xcframework: Embed&Sign
-4. Add Bridging-Header.h: #import <Python/Python.h>
-5. Targets -> Codaic -> Build Settings (Note: Select All)
-    1. "Objective-C Bridging-Header" == "Codaic/Bridging-Header.h"
-    2. "User Script Sandboxing" == "No"
-    3. "Enable Testability" == "Yes"
-    4. "Header Search Path" == "$(BUILT_PRODUCTS_DIR)/Python.framework/Headers"
-6. Targets -> Codaic -> Build Phases
-    1. Add "New Run Script Phase"
-    2. Past following content:
-```bash
-set -e 
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
 
-mkdir -p "$CODESIGNING_FOLDER_PATH/python/lib"
-if [ "$EFFECTIVE_PLATFORM_NAME" = "-iphonesimulator" ]; then
-    echo "Installing Python modules for iOS Simulator"
-    cp -r "$PROJECT_DIR/Support/Python.xcframework/ios-arm64_x86_64-simulator/lib/" "$CODESIGNING_FOLDER_PATH/python/lib/"
-else
-    echo "Installing Python modules for iOS Device"
-    cp -r "$PROJECT_DIR/Support/Python.xcframework/ios-arm64/lib/" "$CODESIGNING_FOLDER_PATH/python/lib/"
-fi
+#endif
 ```
 
-7. After adding `import random` the first time there was this error appearing: `Codaic.app/python/lib/python3.13/lib-dynload/math.cpython-313-iphoneos.so' not valid for use in process: mapped file has no cdhash, completely unsigned? Code has to be at least ad-hoc signed.)`
-    1. Targets -> Codaic -> Build Phases
-    2. Add "New Run Script Phase"
-    3. Past following content:
-
-```bash
-# Sign all .so files in the app bundle
-APP_BUNDLE_PATH="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}"
-
-find "$APP_BUNDLE_PATH/python" -name "*.so" -exec codesign --force --sign "$CODE_SIGN_IDENTITY" {} \;
-```
-
-Run python:
-```Swift
-guard let pythonPath = Bundle.main.path(forResource: "python/lib/python3.13", ofType: nil) else { return }
-guard let libDynloadPath = Bundle.main.path(forResource: "python/lib/python3.13/lib-dynload", ofType: nil) else { return }
-setenv("PYTHONPATH", [pythonPath, libDynloadPath].compactMap { $0 }.joined(separator: ":"), 1)
-
-Py_Initialize()
-PyRun_SimpleString("""print(3*5)""")
-```
 
 ## WebServer
 
