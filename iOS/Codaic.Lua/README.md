@@ -24,7 +24,9 @@
 
 #endif
 ```
-
+5. Lua is using Macros as stack‑shuffling helpers (`lua_pop(L,n)`, `lua_insert(L,idx)` & `lua_remove(L,idx)`) which can't be called from Swift
+  1. Comment them out (`lua.h`)
+  2. Implement them in c functions 
 
 ## WebServer
 
