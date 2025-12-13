@@ -1,3 +1,6 @@
 # Codaic
 
-Transform your iPhone into a powerful development tool with Codaic — the Low-Code IDE for algorithm creation, sensor exploration, and embedded project prototyping. Whether you're learning about sensors, developing algorithms, or extending your embedded projects, Codaic lets you harness your phone's built-in sensors, saving you the cost and hassle of buying extra hardware. Use intuitive Lua-powered nodes to connect, experiment, and innovate — all from your device. Perfect for students, makers, and embedded enthusiasts!
+Turn your iPhone into a powerful development platform with Codaic — a low-code IDE designed for algorithm creation, sensor exploration, and rapid prototyping. Codaic enables you to leverage your device’s built-in sensors, eliminating the need for extra hardware. With intuitive, Lua-powered nodes, you can connect, experiment, and innovate directly from your phone. Codaic is ideal for students, makers, and embedded enthusiasts seeking a flexible and accessible development environment.
+
+- [Getting Started](GettingStarted.md)  
+- [API](API.md)
