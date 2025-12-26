@@ -7,7 +7,7 @@ This document describes the main API functions available in Codaic for node prog
 
 ## General APIs
 
-```lua
+```Lua
 -- Read input from a node port
 local data = System.Input(inputPortIndex)
 
@@ -17,7 +17,7 @@ System.Output(outputPortIndex, data)
 
 ### JSON Data Handling
 
-```lua
+```Lua
 -- Decode JSON data received as a string
 local in0 = System.Input(0)
 local dataIn = cjson.decode(in0)
@@ -34,41 +34,88 @@ System.Output(0, out0)
 System.Sleep(milliseconds)
 ```
 
+### Slot Read/Write
+
+```Lua
+-- Write to a slot
+System.SlotWrite("my-slot", "42")
+
+-- Read from a slot
+local mySlotDataJson = System.SlotRead("my-slot")
+```
+
 ---
 
 ## Hardware APIs
 
 ### Accelerometer
 
-```lua
+```Lua
 -- Activate the accelerometer at a given frequency (Hz)
 System.AccelerometerActivate(freqHz)
 
 -- Read current accelerometer data (returns a table)
-local accelData = System.AccelerometerRead()
--- accelData.X, accelData.Y, accelData.Z
+local accelerometerDataJson = System.AccelerometerRead()
+local accelerometerData = cjson.decode(accelerometerDataJson)
+-- accelerometerData.X
+-- accelerometerData.Y
+-- accelerometerData.Z
+```
+
+### GPS
+
+```Lua
+-- Activate the GPS receiver
+System.GPSOn()
+
+-- Read current gps data
+local gpsDataJson = System.GPSRead()
+local gpsData = cjson.decode(gpsDataJson)
+-- gpsData.Latitude
+-- gpsData.Longitude
+-- gpsData.Altitude
+-- gpsData.Speed
+-- gpsData.Course
+-- gpsData.HorizontalAccuracy
+-- gpsData.VerticalAccuracy
 ```
 
 ### Gyroscope
 
-```lua
+```Lua
 -- Activate the gyroscope at a given frequency (Hz)
 System.GyroscopeActivate(freqHz)
 
 -- Read current gyroscope data (returns a table)
-local gyroData = System.GyroscopeRead()
--- gyroData.X, gyroData.Y, gyroData.Z
+local gyroscopeDataJson = System.GyroscopeRead()
+local gyroscopeData = cjson.decode(gyroscopeDataJson)
+-- gyroscopeData.X
+-- gyroscopeData.Y
+-- gyroscopeData.Z
 ```
 
 ### Magnetometer
 
-```lua
+```Lua
 -- Activate the magnetometer at a given frequency (Hz)
 System.MagnetometerActivate(freqHz)
 
 -- Read current magnetometer data (returns a table)
-local magData = System.MagnetometerRead()
--- magData.X, magData.Y, magData.Z
+local magnometerDataJson = System.MagnetometerRead()
+local magnometerData = cjson.decode(magnometerDataJson)
+-- magnometerData.X
+-- magnometerData.Y
+-- magnometerData.Z
+```
+
+### Torch
+
+```Lua
+-- Activate the torch light
+System.TorchOn()
+
+-- Deactivate the torch light
+System.TorchOff()
 ```
 
 ---
@@ -87,18 +134,4 @@ System.Display(data)
 ```Lua
 -- Write a message to the log component on the run view
 System.Log(message)
-```
-
-### HTTP.In
-
-```lua
--- Receive data from the HTTP server delivered via PUT @ http://<IP>:8080/
-local httpIn = System.HttpIn()
-```
-
-### HTTP.Out
-
-```lua
--- Send data to the HTTP server which can be access via GET @ http://<IP>:8080/
-System.HttpOut(data)
 ```
