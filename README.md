@@ -4,3 +4,4 @@ Turn your iPhone into a powerful development platform with Codaic — a low-code
 
 - [Getting Started](GettingStarted.md)  
 - [API](API.md)
+- [Tips And Tricks](TipsAndTricks.md)
