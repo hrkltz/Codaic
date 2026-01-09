@@ -21,4 +21,5 @@ Each node runs in its own thread and has its own Lua runtime. Nodes can receive 
 
 ## How Should I Start?
 
-In addition to exploring the [API](API.md), you can start by selecting one of the provided templates when creating a new project. These templates offer practical examples of what’s possible with Codaic and demonstrate how to approach more complex tasks.
+In addition to exploring the [API](API.md) and [Tips And Tricks](TipsAndTricks.md) sections, you can start by selecting one of the provided templates when creating a new project. These templates offer practical examples of what’s possible with Codaic and demonstrate how to approach more complex tasks.
+
