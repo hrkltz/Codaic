@@ -4,6 +4,8 @@ This example demonstrates how to convert text into Morse code using the haptic f
 
 ## Stage
 
+![MorseEncoder App Interface](MorseEncoder_0.webp)
+
 ## Code
 
 The foundation of this example is the Morse code alphabet. For detailed information, see [Wikipedia](https://en.wikipedia.org/wiki/Morse_code). Here's a Lua representation that maps letters and numbers to their Morse code symbols:
