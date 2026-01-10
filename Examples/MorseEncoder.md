@@ -1,6 +1,6 @@
 # Codaic / Examples / Morse Encoder
 
-This example demonstrates how to convert text into Morse code using the haptic feedback module (vibrator) on iOS devices. At the end of this project you should have the following stage and output:
+This example demonstrates how to convert text into Morse code using the haptic feedback module (vibrator) on iOS devices. When completed, your project will have the following stage and output:
 
 <table>
   <tr>
@@ -14,7 +14,7 @@ This example demonstrates how to convert text into Morse code using the haptic f
 </table>
 
 
-## Code
+## Introduction
 
 The foundation of this example is the Morse code alphabet. For detailed information, see [Wikipedia](https://en.wikipedia.org/wiki/Morse_code). Here's a Lua representation that maps letters and numbers to their Morse code symbols:
 
@@ -59,7 +59,7 @@ local morseDict = {
 }
 ```
 
-Next we need to consider the timing:
+Next, consider the timing rules for Morse code:
 
 1. A dot/dit equals one unit (called the dit length)
 2. A dash/dah equals three units
@@ -67,11 +67,15 @@ Next we need to consider the timing:
 4. A space between letters equals three units
 5. A space between words equals seven units
 
-We'll set the dot/dit length to 100 ms, which is the minimum interval Codaic can toggle the vibrator. This makes a dash/dah 300 ms long.
+We'll set the dot/dit length to 100 ms, which is the minimum interval at which Codaic can toggle the vibrator. This makes a dash/dah 300 ms long.
+
+## Implement The Solution
+
+After collecting all the basic information, it's time to start the project. First, add a new project and give it a name. Then open it and place the nodes as shown above. You will need a Custom node (Morse-Encoder), the Log node, and the Vibrator node. For the Log and Vibrator nodes, you can simply use the provided implementations without modification.
 
 ### Morse-Encoder Node
 
-This node converts a word into Morse code and generates the output signal to control the haptic feedback module (vibrator).
+This custom node converts a word into Morse code and generates the output signal to control the haptic feedback module (vibrator).
 
 ```Lua
 -- Morse-Encoder Node
@@ -135,7 +139,7 @@ local function wordToMorse(word, dict)
     end
   end
 
-  -- Join each Morse "letter" with a one unit break represented as space.
+  -- Join each Morse "letter" with a one-unit break represented as a space.
   return table.concat(morseCode, " ")
 end
 
@@ -150,7 +154,7 @@ while true do
 
   -- Send the word to the Log Node.
   System.Output(0, word .. " -> " .. morseCode)
-  -- Give the Log node a bit time to read his input before writing the next one.
+  -- Give the Log node a bit of time to read its input before writing the next one.
   System.Sleep(10)
 
   -- Use an indexed loop to access each symbol in the Morse code.
@@ -185,3 +189,11 @@ while true do
   System.Sleep(math.modf(unit*7*1000))
 end
 ```
+
+## Outlook
+
+That's it! Congratulations! You've just completed your first Codaic project! Now it's time to run it. Simply press the play button in the top right corner and listen to your phone. If you like, you can also try replacing the Vibrator node with the Torch node to make your Morse code visible as well.
+
+
+Best,
+Oliver
