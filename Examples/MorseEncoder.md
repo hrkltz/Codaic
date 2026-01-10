@@ -4,7 +4,7 @@ This example demonstrates how to convert text into Morse code using the haptic f
 
 ## Stage
 
-![MorseEncoder App Interface](MorseEncoder_0.webp){width=300px}
+<img src="MorseEncoder_0.webp" width="300" alt="Morse Encoder project stage">
 
 ## Code
 
