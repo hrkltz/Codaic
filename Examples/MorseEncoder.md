@@ -77,6 +77,18 @@ After collecting all the basic information, it's time to start the project. Firs
 
 This custom node converts a word into Morse code and generates the output signal to control the haptic feedback module (vibrator).
 
+The code is organized into three main sections:
+
+1. **Setup**: Initializes the Morse code dictionary that maps each letter and digit to its corresponding symbol (dots and dashes).
+
+2. **Helper Functions**: 
+   - `wordToMorse()` - Transforms an entire word into Morse code by converting each character to uppercase (for dictionary lookup) and joining them with proper spacing
+
+3. **Main Loop**: Continuously reads the word "Codaic", converts it to Morse code, and then iterates through each symbol to:
+   - Determine if it's a dot, dash, or space
+   - Control the vibrator duration accordingly (100ms for dot, 300ms for dash) and send it to the log
+   - Add appropriate gaps between symbols and words
+
 ```Lua
 -- Morse-Encoder Node
 -- Setup
@@ -118,11 +130,6 @@ local morseDict = {
   ["8"] = "---..",
   ["9"] = "----."
 }
-
--- Extract the Morse code for the symbol.
-local function letterToMorse(symbol)
-  return morseDict[symbol]
-end
 
 -- Converts a word to Morse code
 local function wordToMorse(word, dict)
