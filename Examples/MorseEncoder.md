@@ -1,10 +1,18 @@
 # Codaic / Examples / Morse Encoder
 
-This example demonstrates how to convert text into Morse code using the haptic feedback module (vibrator) on iOS devices. At the end of this project you should see the following output:
+This example demonstrates how to convert text into Morse code using the haptic feedback module (vibrator) on iOS devices. At the end of this project you should have the following stage and output:
 
-<img src="MorseEncoder_1.webp" width="300" align="left" alt="Morse Encoder stage">
+<table>
+  <tr>
+    <td>
+      <img src="MorseEncoder_1.webp" width="300" alt="Morse Encoder stage">
+    </td>
+    <td>
+      <img src="MorseEncoder_0.webp" width="300" alt="Morse Encoder output">
+    </td>
+  </tr>
+</table>
 
-<img src="MorseEncoder_0.webp" width="300" align="right" alt="Morse Encoder output">
 
 ## Code
 
