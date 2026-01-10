@@ -8,8 +8,8 @@ This example demonstrates how to convert text into Morse code using the haptic f
     <th>Output</th>
   </tr>
   <tr>
-    <td><img src="MorseEncoder_1.webp" width="300" alt="Morse Encoder stage"></td>
-    <td><img src="MorseEncoder_0.webp" width="300" alt="Morse Encoder output"></td>
+    <td><img src="MorseEncoder_1.webp" width="240" alt="Morse Encoder stage"></td>
+    <td><img src="MorseEncoder_0.webp" width="240" alt="Morse Encoder output"></td>
   </tr>
 </table>
 
