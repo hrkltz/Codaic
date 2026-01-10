@@ -2,7 +2,9 @@
 
 ## Writing Long Scripts
 
-One of Codaic's core ideas is to reduce the effort of writing code by providing pre-built nodes that only need to be connected. However, when implementing algorithms, some code writing is unavoidable, and a smartphone is not ideal for this task. Until I finished my work on a remote editor, here are two practical ways to improve your experience:
+Codaic's core philosophy is to reduce coding effort by providing pre-built nodes that you simply connect together. However, implementing complex algorithms still requires manual coding, and a smartphone's screen isn't ideal for this task. While I work on a remote editor feature, here are two practical alternatives:
 
 1. Connect a Bluetooth keyboard to your phone.
-2. If you have a macOS device, use the built-in "iPhone Mirroring" app.
+2. If you have a macOS device, use the built-in "iPhone Mirroring" feature.
+
+> **Note:** I've discovered an issue where the vibrator doesn't work after using iPhone Mirroring to write code. You can resolve this by restarting the app and running the code directly on your phone's screen. This issue may affect other components as well.
