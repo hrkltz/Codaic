@@ -1,12 +1,14 @@
 # Codaic / Examples / Morse Encoder
 
-This example demonstrates how to convert text into Morse code using the haptic feedback module (vibrator) on iOS devices.
+This example demonstrates how to convert text into Morse code using the haptic feedback module (vibrator) on iOS devices. At the end of this project you should see the following output:
 
-## Stage
+<img src="MorseEncoder_0.webp" width="300" alt="Morse Encoder output">
 
-<img src="MorseEncoder_0.webp" width="300" alt="Morse Encoder project stage">
+## Stage
 
-## Code
+<img src="MorseEncoder_1.webp" width="300" alt="Morse Encoder stage">
+
+## Code
 
 The foundation of this example is the Morse code alphabet. For detailed information, see [Wikipedia](https://en.wikipedia.org/wiki/Morse_code). Here's a Lua representation that maps letters and numbers to their Morse code symbols:
 
@@ -141,7 +143,9 @@ while true do
   local morseCode = wordToMorse(word, morseDict)
 
   -- Send the word to the Log Node.
-  System.Output(0, morseCode)
+  System.Output(0, word .. " -> " .. morseCode)
+  -- Give the Log node a bit time to read his input before writing the next one.
+  System.Sleep(10)
 
   -- Use an indexed loop to access each symbol in the Morse code.
   for i = 1, #morseCode do
@@ -154,10 +158,12 @@ while true do
       if morseSymbol == "." then
         -- Turn the vibrator on for 100ms (dot).
         System.Output(1, unit)
+        System.Output(0, "> . " .. unit*1000 .. "ms")
         System.Sleep(math.modf(unit*1000))
       elseif morseSymbol == "-" then
         -- Turn the vibrator on for 300ms (dash).
         System.Output(1, unit*3)
+        System.Output(0, "> - " .. unit*3*1000 .. "ms")
         System.Sleep(math.modf(unit*3*1000))
       end
 
