@@ -69,7 +69,7 @@ Next, consider the timing rules for Morse code:
 
 We'll set the dot/dit length to 100 ms, which is the minimum interval at which Codaic can toggle the vibrator. This makes a dash/dah 300 ms long.
 
-## Implement The Solution
+## Implementation
 
 After collecting all the basic information, it's time to start the project. First, add a new project and give it a name. Then open it and place the nodes as shown above. You will need a Custom node (Morse-Encoder), the Log node, and the Vibrator node. For the Log and Vibrator nodes, you can simply use the provided implementations without modification.
 
@@ -192,8 +192,9 @@ end
 
 ## Outlook
 
-That's it! Congratulations! You've just completed your first Codaic project! Now it's time to run it. Simply press the play button in the top right corner and listen to your phone. If you like, you can also try replacing the Vibrator node with the Torch node to make your Morse code visible as well.
+That's it! Now press the play button in the top right corner and listen to your phone. Congratulations on completing your first Codaic project!
 
+For an extra challenge, try replacing the Vibrator node with the Torch node to create a visual representation of your Morse code using light pulses. In the meantime, I will continue improving Codaic and provide more examples.
 
 Best,
 Oliver
