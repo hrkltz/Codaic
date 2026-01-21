@@ -210,5 +210,4 @@ That's it! Now press the play button in the top right corner and listen to your 
 
 For an extra challenge, try replacing the Vibrator node with the Torch node to create a visual representation of your Morse code using light pulses. In the meantime, I will continue improving Codaic and provide more examples.
 
-Best,
-Oliver
+Best, Oliver
