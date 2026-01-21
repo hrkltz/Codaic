@@ -131,6 +131,11 @@ local morseDict = {
   ["9"] = "----."
 }
 
+-- Extract the Morse code for the symbol.
+local function letterToMorse(symbol)
+  return morseDict[symbol]
+end
+
 -- Converts a word to Morse code
 local function wordToMorse(word, dict)
   local morseCode = {}
@@ -146,7 +151,7 @@ local function wordToMorse(word, dict)
     end
   end
 
-  -- Join each Morse "letter" with a one-unit break represented as a space.
+  -- Join each Morse "letter" with a one unit break represented as space.
   return table.concat(morseCode, " ")
 end
 
@@ -161,8 +166,8 @@ while true do
 
   -- Send the word to the Log Node.
   System.Output(0, word .. " -> " .. morseCode)
-  -- Give the Log node a bit of time to read its input before writing the next one.
-  System.Sleep(10)
+  -- Give the Log node a bit time to read his input before writing the next one.
+  System.Sleep(0.01)
 
   -- Use an indexed loop to access each symbol in the Morse code.
   for i = 1, #morseCode do
@@ -170,30 +175,32 @@ while true do
 
     if morseSymbol == " " then
       -- Gap between letters (300ms)
-      System.Sleep(math.modf(unit*3*1000))
+      System.Sleep(unit*3)
     else
       if morseSymbol == "." then
         -- Turn the vibrator on for 100ms (dot).
-        System.Output(1, unit)
+        System.Output(1, "1")
         System.Output(0, "> . " .. unit*1000 .. "ms")
-        System.Sleep(math.modf(unit*1000))
+        System.Sleep(unit)
+        System.Output(1, "0")
       elseif morseSymbol == "-" then
         -- Turn the vibrator on for 300ms (dash).
-        System.Output(1, unit*3)
-        System.Output(0, "> - " .. unit*3*1000 .. "ms")
-        System.Sleep(math.modf(unit*3*1000))
+        System.Output(1, "1")
+        System.Output(0, "> - " .. unit*3 .. "ms")
+        System.Sleep(unit*3)
+        System.Output(1, "0")
       end
 
       -- Add intra-letter gap (100ms) only if the next symbol is a dot or dash.
       local nextMorseSymbol = morseCode:sub(i + 1, i + 1)
       if nextMorseSymbol == "." or nextMorseSymbol == "-" then
-        System.Sleep(math.modf(unit*1000))
+        System.Sleep(unit)
       end
     end
   end
 
   -- Finally apply the word gap (700ms).
-  System.Sleep(math.modf(unit*7*1000))
+  System.Sleep(unit*7)
 end
 ```
 
